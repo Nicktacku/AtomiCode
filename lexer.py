@@ -54,5 +54,6 @@ class Lexer:
             self.move()
         return operator
 
-lexer = Lexer("1.2 * 1")
-print(lexer.to_token())
+if __name__ == "__main__":
+    lexer = Lexer("1.2 * 1")
+    print(lexer.to_token())

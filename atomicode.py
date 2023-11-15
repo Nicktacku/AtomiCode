@@ -1,4 +1,5 @@
 from sys import argv
+from lexer import Lexer
 
 
 class AtomiCode:
@@ -6,14 +7,15 @@ class AtomiCode:
         self.had_error = False
 
     def run_file(self, path):
-        # if self.had_error:
-        #     break
         print(path)
 
     def run_prompt(self):
-        while True:
+        quit = False
+        while not quit:
             prompt = input("> ")
-            print(eval(prompt))
+            if prompt == "quit()": break
+            lexer = Lexer(prompt)
+            print(lexer.to_token())
             self.had_error = False
 
     def error(self, line, message):
