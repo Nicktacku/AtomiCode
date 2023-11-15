@@ -10,10 +10,11 @@ class Lexer:
 
     def to_token(self):
         while self.index < len(self.inp):
-            if self.current == " ":
+            if self.current == " " or self.current == "\n":
                 self.move()
 
             if self.current in digits:
+
                 output = self.tokenize_digit()
                 if output == None:
                     return Invalid(self.inp)
@@ -39,7 +40,7 @@ class Lexer:
 
     def tokenize_digit(self):
         numbers = ""
-        while self.current != " " and self.current != None:
+        while self.current != " " and self.current != None and self.current != "\n":
             if self.current not in digits and self.current != ".":
                 return None
 

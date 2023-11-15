@@ -7,7 +7,9 @@ class AtomiCode:
         self.had_error = False
 
     def run_file(self, path):
-        print(path)
+        f = open("sample.atc", "r")
+        lexer = Lexer(f.read())
+        print(lexer.to_token())
 
     def run_prompt(self):
         quit = False
@@ -26,8 +28,6 @@ class AtomiCode:
         self.had_error = True
 
 atc = AtomiCode()
-
-print(len(argv))
 
 if len(argv) - 1 > 1:
     print("Usage: atomicode [script]")
