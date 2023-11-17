@@ -1,2 +1,11 @@
-1 + 2
-3 + 4
+//this is a test file
+result = 1 ==> 2;
+greetings = "HELLO" + "HI";
+element = Hydrogen
+
+assuming(1 > 2){
+    out(result);
+}
+
+out(greetings);
+out(element);
