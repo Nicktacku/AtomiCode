@@ -10,16 +10,21 @@ class Lexer:
 
     def to_token(self):
         while self.index < len(self.inp):
-            not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else None
-            is_multiplication = self.inp[self.index + 1] == " " if (len(self.inp) > self.index + 1) and self.current == "*" else True
+        
+            
+            
+            count = self.current.count(" ")
+            
 
             if self.current in spaces:
-
                 self.move()
 
             if self.current == None:
                 break
-
+            
+            not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
+            is_multiplication = self.inp[self.index + 1] == " " if (len(self.inp) > self.index + 1 and self.current == "*") else True
+            
             if self.current in digits:
                 output = self.tokenize_digit()
                 if output == None:
@@ -30,8 +35,8 @@ class Lexer:
                 else:
                     self.tokens.append(Digit(output))
             elif (self.current in operators or self.current in ["&", "|"]) and not_comment and is_multiplication:
-                print(self.inp[self.index + 1])
                 output = self.tokenize_operation()
+                
                 if output == None:
                     return Invalid(self.inp)
                     break
@@ -65,8 +70,9 @@ class Lexer:
 
     def tokenize_digit(self):
         numbers = ""
-        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in special_characters:
-            if self.current not in digits and self.current != ".":
+        valid_digits = digits + "."
+        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in special_characters and self.current not in special_characters:
+            if self.current not in valid_digits:
                 return None
 
             numbers += self.current
@@ -159,8 +165,7 @@ class Lexer:
         lexeme = ""
         identifier_valid = True
 
-        while self.current not in spaces and self.current != None and self.current not in special_characters:
-            
+        while self.current not in spaces and self.current != None and self.current not in special_characters and self.current not in delimeters:
             lexeme_accepted = self.current in digits or self.current in alphabet or self.current == "_"
             if not lexeme_accepted:
                 identifier_valid = False
@@ -175,6 +180,8 @@ class Lexer:
             return (lexeme, "Molecular_Formula")
         elif lexeme in booleans:
             return (lexeme, "BOOLEANLITERAL")
+        elif lexeme in constants:
+            return (lexeme, "CONSTANT")
 
         if len(self.inp) > self.index + 1:
             if self.inp[self.index + 1] in alphabet:
@@ -191,7 +198,6 @@ class Lexer:
         elif identifier_valid:
             return (lexeme, "Identifier")
         
-        print("here")
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ class AtomiCode:
         self.had_error = False
 
     def run_file(self, path):
-        f = open("sample.atc", "r")
+        f = open(path, "r")
         lexer = Lexer(f.read())
         print(lexer.to_token())
 
