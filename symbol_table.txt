@@ -1,0 +1,8 @@
+----------------------------------------
+|	Tokens					Lexemes    |
+----------------------------------------
+	Keyword                  out
+	LEFTROUNDBRACKET         (
+	String                   "yay"
+	RIGHTROUNDBRACKET        )
+	Delimeter                SEMICOLON

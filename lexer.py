@@ -6,15 +6,12 @@ class Lexer:
         self.inp = inp
         self.index = 0
         self.current = self.inp[self.index]
+        self.lexemes = []
         self.tokens = []
 
     def to_token(self):
         while self.index < len(self.inp):
-        
-            
-            
             count = self.current.count(" ")
-            
 
             if self.current in spaces:
                 self.move()
@@ -100,10 +97,14 @@ class Lexer:
         quotes = ["'", '"']
         if self.current in quotes:
             value = ""
-            special_character = self.current
-            while self.current != " " and self.current != None and (self.current in quotes or self.current in alphabet):
+            value += self.current
+            self.move()
+            while self.current not in quotes and self.current != None:
                 value += self.current
                 self.move()
+            value += self.current
+            self.move()
+
             if value.endswith(("'", '"')):
                 return (value, "String")
             else:
@@ -188,7 +189,7 @@ class Lexer:
                 lexeme += self.current
                 self.move()
                 while self.current not in spaces and self.current != None:
-                    print(self.current)
+                    
                     lexeme += self.current
                     self.move()
                 if lexeme in compound_name:
