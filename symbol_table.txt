@@ -3,6 +3,8 @@
 ----------------------------------------
 	Keyword                  out
 	LEFTROUNDBRACKET         (
+	DIGIT                    1
+	ADD                      +
 	String                   "yay"
 	RIGHTROUNDBRACKET        )
 	Delimeter                SEMICOLON
