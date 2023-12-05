@@ -10,6 +10,7 @@ class Lexer:
         self.tokens = []
 
     def to_token(self):
+        number_appeared = False
         while self.index < len(self.inp):
             count = self.current.count(" ")
 
@@ -18,11 +19,21 @@ class Lexer:
 
             if self.current == None:
                 break
-            
+
             not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
-            is_multiplication = self.inp[self.index + 1] == " " if (len(self.inp) > self.index + 1 and self.current == "*") else True
-            
-            if self.current in digits:
+
+            if (self.current == "-" or self.current == "+") and not number_appeared:
+                number_appeared = True
+                output = self.tokenize_digit()
+                if output == None:
+                    return Invalid(self.inp)
+                if "." in output:
+                    self.tokens.append(Float(output))
+                else:
+                    self.tokens.append(Digit(output))
+
+            elif self.current in digits:
+                number_appeared = True
                 output = self.tokenize_digit()
                 if output == None:
                     return Invalid(self.inp)
@@ -31,9 +42,11 @@ class Lexer:
                     self.tokens.append(Float(output))
                 else:
                     self.tokens.append(Digit(output))
-            elif (self.current in operators or self.current in ["&", "|"]) and not_comment and is_multiplication:
+            elif (self.current in operators or self.current in ["&", "|"]) and not_comment:
+                number_appeared = False
+
                 output = self.tokenize_operation()
-                
+
                 if output == None:
                     return Invalid(self.inp)
                     break
@@ -51,11 +64,17 @@ class Lexer:
                     break
                 self.tokens.append(Lexeme(output[0], output[1]))
             elif self.current in special_characters:
+                
+                
                 output = self.tokenize_special_characters()
                 if output == None:
                     return Invalid(self.inp)
-                    break
                 self.tokens.append(SpecialChar(output[0], output[1]))
+            elif self.current == ".":
+                    output = self.tokenize_digit()
+                    if output == None:
+                        return Invalid(self.inp)
+                    self.tokens.append(Float(output))
         return self.tokens
 
     def move(self):
@@ -67,28 +86,31 @@ class Lexer:
 
     def tokenize_digit(self):
         numbers = ""
-        valid_digits = digits + "."
-        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in special_characters and self.current not in special_characters:
+        valid_digits = digits + "." + "-" + "+"
+        
+        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in special_characters:
             if self.current not in valid_digits:
                 return None
 
             numbers += self.current
             self.move()
 
+
+        
         if numbers.count(".") > 1:
             return None
-        
+
         return numbers
 
     def tokenize_operation(self):
         operator = ""
-        while self.current != " " and self.current != None:
+        while self.current != " " and self.current != None and self.current not in digits:
             operator += self.current
             self.move()
         return (operator, operators[operator])
 
     def tokenize_delimeter(self):
-        delimeter = delimeters[self.current]
+        delimeter = self.current
         self.move()
         return delimeter
 
@@ -106,7 +128,7 @@ class Lexer:
             self.move()
 
             if value.endswith(("'", '"')):
-                return (value, "String")
+                return (value, "STRING")
             else:
                 return None
         elif self.current in comments:
@@ -116,7 +138,7 @@ class Lexer:
                     value += self.current
                     self.move()
                 if value.startswith("//"):
-                    return (value, "Comment")
+                    return (value, "COMMENT")
                 else:
                     return None
             elif self.current == "#":
@@ -131,32 +153,54 @@ class Lexer:
                     return (value, "MULTILINECOMMENT")
                 else:
                     return None
-        elif self.current == "*":
+        elif self.current == "@":
             value = ""
-            while self.current not in spaces and self.current != None:
+            while self.current != None and self.current not in spaces and self.current not in operators:
                 value += self.current
                 self.move()
-            
-            if value in atomic_number:
+
+            if value in at_num:
                 return (value, "ATOMICNUMBERLITERAL")
-            elif value in atomic_symbol:
-                return (value, "ATOMICSYMBOLLITERAL")
-            elif value in positive_charge:
-                return (value, "POSITIVECHARGELITERAL")
-            elif value in negative_charge:
-                return (value, "NEGATIVECHARGELITERAL")
-            elif value in boyle:
-                return (value, "BOYLELITERAL")
-            elif value in charles:
-                return (value, "CHARLESLITERAL")
-            elif value in avogadro:
-                return (value, "AVOGADROLITERAL")
-            elif value in ideal_gas:
-                return (value, "IDEALGASLITERAL")
-            elif value in combined_gas:
-                return (value, "COMBINEDGASLITERAL")
+            elif value in alkali_list:
+                return (value, "ALKALISYMBOLLITERAL")
+            elif value in alkaline_earth_list:
+                return (value, "ALKALINEEARTHSYMBOLLITERAL")
+            elif value in icosagens_list:
+                return (value, "ICOSAGENSSYMBOLLITERAL")
+            elif value in crystal_list:
+                return (value, "CRYSTALSYMBOLLITERAL")
+            elif value in pnicto_list:
+                return (value, "PNICTOSYMBOLLITERAL")
+            elif value in chalco_list:
+                return (value, "CHALCOSYMBOLLITERAL")
+            elif value in halo_list:
+                return (value, "HALOSYMBOLLITERAL")
+            elif value in noble_list:
+                return (value, "NOBLESYMBOLLITERAL")
+            elif value in n_alkali_list:
+                return (value, "ALKALINAMELITERAL")
+            elif value in n_alkaline_earth_list:
+                return (value, "ALKALINEEARTHNAMELITERAL")
+            elif value in n_icosagens_list:
+                return (value, "ICOSAGENSNAMELITERAL")
+            elif value in n_crystal_list:
+                return (value, "CRYSTALNAMELITERAL")
+            elif value in n_pnicto_list:
+                return (value, "PNICTONAMELITERAL")
+            elif value in n_chalco_list:
+                return (value, "CHALCONAMELITERAL")
+            elif value in n_halo_list:
+                return (value, "HALONAMELITERAL")
+            elif value in n_noble_list:
+                return (value, "NOBLENAMELITERAL")
             else:
                 return None
+        # elif self.current == ".":
+        #     value = ""
+        #     while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in special_characters and self.current not in operators:
+        #         value += self.current
+        #         self.move()
+        #     return value
         else:
             special_character += self.current
             self.move()
@@ -174,31 +218,26 @@ class Lexer:
             self.move()
 
         if lexeme in keywords:
-            return (lexeme, "Keyword")
-        elif lexeme in atomic_name:
-            return (lexeme, "Atomic_Name")
-        elif lexeme in molecular_formula:
-            return (lexeme, "Molecular_Formula")
+            return (lexeme, "KEYWORD")
         elif lexeme in booleans:
             return (lexeme, "BOOLEANLITERAL")
+        elif lexeme in metals:
+            return (lexeme, "METALSYMBOLLITERAL")
+        elif lexeme in non_metals:
+            return (lexeme, "NONMETALSYMBOLLITERAL")
+        elif lexeme in metalloids:
+            return (lexeme, "METALLOIDSSYMBOLLITERAL")
+        elif lexeme in n_metals:
+            return (lexeme, "METALNAMELITERAL")
+        elif lexeme in n_non_metals:
+            return (lexeme, "NONMETALNAMELITERAL")
+        elif lexeme in n_metalloids:
+            return (lexeme, "METALLOIDSNAMELITERAL")
         elif lexeme in constants:
             return (lexeme, "CONSTANT")
-
-        if len(self.inp) > self.index + 1:
-            if self.inp[self.index + 1] in alphabet:
-                lexeme += self.current
-                self.move()
-                while self.current not in spaces and self.current != None:
-                    
-                    lexeme += self.current
-                    self.move()
-                if lexeme in compound_name:
-                    return (lexeme, "Compound_Name")
-            elif identifier_valid:
-                return (lexeme, "Identifier")
         elif identifier_valid:
-            return (lexeme, "Identifier")
-        
+            return (lexeme, "IDENTIFIER")
+
 
 
 if __name__ == "__main__":

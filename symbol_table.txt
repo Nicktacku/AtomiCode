@@ -1,10 +1,19 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	Keyword                  out
+	COMMENT                  // its an infinite loop
+	KEYWORD                  while
 	LEFTROUNDBRACKET         (
-	DIGIT                    1
-	ADD                      +
-	String                   "yay"
+	IDENTIFIER               i
+	LESSERTHAN               <
+	DIGIT                    2
 	RIGHTROUNDBRACKET        )
-	Delimeter                SEMICOLON
+	LEFTCURLYBRACE           {
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               i
+	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
+	KEYWORD                  break
+	DELIMETER                ;
+	RIGHTCURLYBRACE          }

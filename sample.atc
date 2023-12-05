@@ -1,1 +1,6 @@
-out(1 + "yay");
+// its an infinite loop
+
+while (i < 2){
+    out(i);
+    break;
+}

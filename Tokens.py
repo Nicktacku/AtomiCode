@@ -16,7 +16,7 @@ class Digit(Token):
 
 class Float(Token):
     def __init__(self, value):
-        super().__init__(value, "Float")
+        super().__init__(value, "FLOAT")
 
     def __repr__(self):
         return self.token
@@ -38,7 +38,7 @@ class Operator(Token):
 
 class Delimeter(Token):
     def __init__(self, value):
-        super().__init__(value, "Delimeter")
+        super().__init__(value, "DELIMETER")
 
     def __repr__(self):
         return self.token
@@ -71,7 +71,7 @@ class Lexeme(Token):
 
 class Invalid(Token):
     def __init__(self, value):
-        super().__init__(value, "Invalid")
+        super().__init__(value, "INVALID")
 
     def __repr__(self):
         return self.token
