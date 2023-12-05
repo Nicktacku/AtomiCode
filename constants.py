@@ -37,7 +37,7 @@ keywords = [
     "except",
     "import",
     "in",
-    "ins",
+    "inp",
     "iter",
     "none",
     "out",
