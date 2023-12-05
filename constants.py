@@ -34,6 +34,7 @@ keywords = [
     "break",
     "class",
     "continue",
+    "def",
     "except",
     "import",
     "in",
