@@ -10,6 +10,7 @@ class Lexer:
         self.tokens = []
 
     def to_token(self):
+        print(self.current)
         number_appeared = False
         while self.index < len(self.inp):
             count = self.current.count(" ")
@@ -25,9 +26,9 @@ class Lexer:
             if (self.current == "-" or self.current == "+") and not number_appeared:
                 number_appeared = True
                 output = self.tokenize_digit()
-                if output == None:
-                    return Invalid(self.inp)
-                if "." in output:
+                if "INVALID" in output:
+                    self.tokens.append(Invalid(output[0]))
+                elif "." in output:
                     self.tokens.append(Float(output))
                 else:
                     self.tokens.append(Digit(output))
@@ -35,8 +36,8 @@ class Lexer:
             elif self.current in digits:
                 number_appeared = True
                 output = self.tokenize_digit()
-                if output == None:
-                    return Invalid(self.inp)
+                if "INVALID" in output:
+                    self.tokens.append(Invalid(output[0]))
                     break
                 if "." in output:
                     self.tokens.append(Float(output))
@@ -47,33 +48,31 @@ class Lexer:
 
                 output = self.tokenize_operation()
 
-                if output == None:
-                    return Invalid(self.inp)
+                if "INVALID" in output:
+                    self.tokens.append(Invalid(output[0]))
                     break
                 self.tokens.append(Operator(output[0], output[1]))
             elif self.current in delimeters:
                 output = self.tokenize_delimeter()
-                if output == None:
-                    return Invalid(self.inp)
+                if "INVALID" in output:
+                    self.tokens.append(Invalid(output[0]))
                     break
                 self.tokens.append(Delimeter(output))
             elif self.current in alphabet:
                 output = self.tokenize_lexeme()
-                if output == None:
-                    return Invalid(self.inp)
+                if "INVALID" in output:
+                    self.tokens.append(Invalid(output[0]))
                     break
                 self.tokens.append(Lexeme(output[0], output[1]))
             elif self.current in special_characters:
-                
-                
                 output = self.tokenize_special_characters()
-                if output == None:
-                    return Invalid(self.inp)
+                if "INVALID" in output:
+                    self.tokens.append(Invalid(output[0]))
                 self.tokens.append(SpecialChar(output[0], output[1]))
             elif self.current == ".":
                     output = self.tokenize_digit()
                     if output == None:
-                        return Invalid(self.inp)
+                        return Invalid(self.current)
                     self.tokens.append(Float(output))
         return self.tokens
 
@@ -87,18 +86,22 @@ class Lexer:
     def tokenize_digit(self):
         numbers = ""
         valid_digits = digits + "." + "-" + "+"
-        
-        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in special_characters:
+
+        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in (")", "]") and self.current not in operators:
+            not_digit = False
             if self.current not in valid_digits:
-                return None
+                not_digit = True
 
             numbers += self.current
             self.move()
+        
+        if not_digit:
+            return (numbers, "INVALID")
 
 
         
         if numbers.count(".") > 1:
-            return None
+            return (numbers, "INVALID")
 
         return numbers
 
@@ -107,7 +110,10 @@ class Lexer:
         while self.current != " " and self.current != None and self.current not in digits:
             operator += self.current
             self.move()
-        return (operator, operators[operator])
+        if operator in operators:
+            return (operator, operators[operator])
+        else:
+            return (operator, "INVALID")
 
     def tokenize_delimeter(self):
         delimeter = self.current
@@ -115,6 +121,7 @@ class Lexer:
         return delimeter
 
     def tokenize_special_characters(self):
+        print("special",self.current)
         special_character = ""
         quotes = ["'", '"']
         if self.current in quotes:
@@ -130,7 +137,7 @@ class Lexer:
             if value.endswith(("'", '"')):
                 return (value, "STRING")
             else:
-                return None
+                return (value, "INVALID")
         elif self.current in comments:
             value = ""
             if self.current == "/":
@@ -140,7 +147,7 @@ class Lexer:
                 if value.startswith("//"):
                     return (value, "COMMENT")
                 else:
-                    return None
+                    return (value, "INVALID")
             elif self.current == "#":
                 value += self.current
                 self.move()
@@ -152,12 +159,19 @@ class Lexer:
                 if value.startswith("#") and value.endswith("#"):
                     return (value, "MULTILINECOMMENT")
                 else:
-                    return None
+                    return (value, "INVALID")
         elif self.current == "@":
             value = ""
-            while self.current != None and self.current not in spaces and self.current not in operators:
+            value += self.current
+            self.move()
+            while self.current != None and self.current not in spaces and self.current not in operators and self.current not in special_characters:
                 value += self.current
                 self.move()
+
+                if self.current in upper_alphabet:
+                    if self.inp[self.index + 1] in upper_alphabet:
+                        break
+                print("value: ",value)
 
             if value in at_num:
                 return (value, "ATOMICNUMBERLITERAL")
@@ -194,23 +208,29 @@ class Lexer:
             elif value in n_noble_list:
                 return (value, "NOBLENAMELITERAL")
             else:
-                return None
-        # elif self.current == ".":
-        #     value = ""
-        #     while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in special_characters and self.current not in operators:
-        #         value += self.current
-        #         self.move()
-        #     return value
+                return (value, "INVALID")
+        elif self.current == "_":
+            value = ""
+            value += self.current
+            self.move()
+            while (self.current not in spaces and self.current != None and self.current not in special_characters and self.current not in delimeters and self.current not in operators) or self.current == "_":
+                value += self.current
+                self.move()
+            return (value, "IDENTIFIER")
+            
+            
+
         else:
             special_character += self.current
             self.move()
+            print("special characters",special_character)
         return (special_character, special_characters[special_character])
 
     def tokenize_lexeme(self):
         lexeme = ""
         identifier_valid = True
 
-        while self.current not in spaces and self.current != None and self.current not in special_characters and self.current not in delimeters:
+        while (self.current not in spaces and self.current != None and self.current not in special_characters  and self.current not in delimeters and self.current not in operators) or self.current == "_":
             lexeme_accepted = self.current in digits or self.current in alphabet or self.current == "_"
             if not lexeme_accepted:
                 identifier_valid = False

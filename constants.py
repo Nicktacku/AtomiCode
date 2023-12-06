@@ -1,6 +1,7 @@
 digits = "0123456789"
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+upper_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 spaces = [" ", "\n"]
 
@@ -55,6 +56,7 @@ special_characters = {
     "#" : "MULTILINECOMMENT",
     "@": "ATSIGN", # di pa ata nadadagdag sa documentation
     "\\" : "BACKSLASH",
+    "_": "UNDERSCORE",
     '"' : "QUOTATIONMARK",
     "'" : "APOSTROPHE",
     "?" : "QUESTIONMARK",

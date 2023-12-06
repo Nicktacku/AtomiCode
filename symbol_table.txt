@@ -1,19 +1,4 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	COMMENT                  // its an infinite loop
-	KEYWORD                  while
-	LEFTROUNDBRACKET         (
-	IDENTIFIER               i
-	LESSERTHAN               <
-	DIGIT                    2
-	RIGHTROUNDBRACKET        )
-	LEFTCURLYBRACE           {
-	KEYWORD                  out
-	LEFTROUNDBRACKET         (
-	IDENTIFIER               i
-	RIGHTROUNDBRACKET        )
-	DELIMETER                ;
-	KEYWORD                  break
-	DELIMETER                ;
-	RIGHTCURLYBRACE          }
+	IDENTIFIER               __

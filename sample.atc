@@ -1,6 +1,1 @@
-// its an infinite loop
-
-while (i < 2){
-    out(i);
-    break;
-}
+__

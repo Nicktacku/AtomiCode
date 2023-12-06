@@ -77,4 +77,5 @@ class Invalid(Token):
         return self.token
 
     def __str__(self):
+        print(self.value)
         return format(self.token, "<25") + self.value
