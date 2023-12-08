@@ -1,4 +1,7 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	IDENTIFIER               __
+	IDENTIFIER               _1_
+	EQUAL                    ==
+	STRING                   "facebook"
+	DELIMETER                ;

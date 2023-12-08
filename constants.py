@@ -63,9 +63,9 @@ special_characters = {
     "{" : "LEFTCURLYBRACE",
     "}" : "RIGHTCURLYBRACE",
     "(" : "LEFTROUNDBRACKET",
-    ")" : "RIGHTROUNDBRACKET",
+    ")" : "RIGHTROUNDBRACKET", #consider in int
     "[" : "LEFTSQUAREBRACKET",
-    "]" : "RIGHTSQUAREBRACKET",
+    "]" : "RIGHTSQUAREBRACKET",# consider in int
     "`" : "BACKTICK"
 }
 
