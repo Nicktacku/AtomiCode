@@ -2,7 +2,8 @@
 |	Tokens					Lexemes    |
 ----------------------------------------
 	IDENTIFIER               _1_
-	INVALID                  1b
+	DIGIT                    1
+	SUBTRACT                 -
 	EQUAL                    ==
 	STRING                   "facebook"
 	DELIMETER                ;
