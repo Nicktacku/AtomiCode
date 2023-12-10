@@ -1,5 +1,9 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	INVALID                  1v
-	IDENTIFIER               f
+	IDENTIFIER               _1_
+	DIGIT                    1
+	SUBTRACT                 -
+	EQUAL                    ==
+	STRING                   "facebook"
+	DELIMETER                ;
