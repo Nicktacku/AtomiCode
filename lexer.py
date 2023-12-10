@@ -38,7 +38,6 @@ class Lexer:
                 output = self.tokenize_digit()
                 if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
-                    break
                 if "." in output:
                     self.tokens.append(Float(output))
                 else:
@@ -96,7 +95,8 @@ class Lexer:
             self.move()
         
         if not_digit:
-            return (numbers, "INVALID")
+            print("not_digit")
+            return (numbers)
 
 
         

@@ -2,8 +2,17 @@
 |	Tokens					Lexemes    |
 ----------------------------------------
 	IDENTIFIER               _1_
-	DIGIT                    1
-	SUBTRACT                 -
-	EQUAL                    ==
-	STRING                   "facebook"
+	ASSIGN                   =
+	DIGIT                    3
+	DELIMETER                ;
+	DIGIT                    2_
+	ASSIGN                   =
+	FLOAT                    2.1
+	DELIMETER                ;
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               _1_
+	ADD                      +
+	DIGIT                    2_
+	RIGHTROUNDBRACKET        )
 	DELIMETER                ;
