@@ -12,14 +12,12 @@ class Lexer:
     def to_token(self):
         print(self.current)
         number_appeared = False
-        while self.index < len(self.inp):
-            count = self.current.count(" ")
 
+        while self.index < len(self.inp) and self.current != None:
+
+            # skips out spaces
             if self.current in spaces:
                 self.move()
-
-            if self.current == None:
-                break
 
             not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
 
@@ -49,19 +47,16 @@ class Lexer:
 
                 if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
-                    break
                 self.tokens.append(Operator(output[0], output[1]))
             elif self.current in delimeters:
                 output = self.tokenize_delimeter()
                 if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
-                    break
                 self.tokens.append(Delimeter(output))
             elif self.current in alphabet:
                 output = self.tokenize_lexeme()
                 if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
-                    break
                 self.tokens.append(Lexeme(output[0], output[1]))
             elif self.current in special_characters:
                 output = self.tokenize_special_characters()
@@ -86,20 +81,18 @@ class Lexer:
         numbers = ""
         valid_digits = digits + "." + "-" + "+"
 
-        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in (")", "]") and self.current not in operators:
+        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in (")", "]", "_") and self.current not in operators:
             not_digit = False
             if self.current not in valid_digits:
                 not_digit = True
 
             numbers += self.current
             self.move()
-        
+
         if not_digit:
             print("not_digit")
             return (numbers)
 
-
-        
         if numbers.count(".") > 1:
             return (numbers, "INVALID")
 
@@ -217,8 +210,6 @@ class Lexer:
                 value += self.current
                 self.move()
             return (value, "IDENTIFIER")
-            
-            
 
         else:
             special_character += self.current

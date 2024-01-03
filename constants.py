@@ -70,7 +70,7 @@ special_characters = {
 }
 
 comments = {
-    "/" : "COMMENT",
+    "//" : "COMMENT",
     "#" : "MULTILINECOMMENT"
 }
 

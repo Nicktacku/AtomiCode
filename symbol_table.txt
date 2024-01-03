@@ -5,7 +5,8 @@
 	ASSIGN                   =
 	DIGIT                    3
 	DELIMETER                ;
-	DIGIT                    2_
+	DIGIT                    2
+	IDENTIFIER               _
 	ASSIGN                   =
 	FLOAT                    2.1
 	DELIMETER                ;
@@ -13,6 +14,7 @@
 	LEFTROUNDBRACKET         (
 	IDENTIFIER               _1_
 	ADD                      +
-	DIGIT                    2_
+	DIGIT                    2
+	IDENTIFIER               _
 	RIGHTROUNDBRACKET        )
 	DELIMETER                ;
