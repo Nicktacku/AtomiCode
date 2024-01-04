@@ -19,6 +19,7 @@ class Lexer:
             if self.current in spaces:
                 self.move()
 
+            # defines if its a comment or divide
             not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
 
             if (self.current == "-" or self.current == "+") and not number_appeared:
@@ -59,7 +60,10 @@ class Lexer:
                     self.tokens.append(Invalid(output[0]))
                 self.tokens.append(Lexeme(output[0], output[1]))
             elif self.current in special_characters:
-                output = self.tokenize_special_characters()
+                if self.current == "_":
+                    output = self.tokenize_lexeme()
+                else:
+                    output = self.tokenize_special_characters()
                 if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
                 self.tokens.append(SpecialChar(output[0], output[1]))
@@ -79,23 +83,28 @@ class Lexer:
 
     def tokenize_digit(self):
         numbers = ""
+        unary_signs = ["-", "+"]
         valid_digits = digits + "." + "-" + "+"
+        not_digit = False
 
-        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current not in (")", "]", "_") and self.current not in operators:
-            not_digit = False
+        while self.current not in spaces and self.current != None and self.current in valid_digits:
             if self.current not in valid_digits:
                 not_digit = True
 
             numbers += self.current
             self.move()
 
+
         if not_digit:
-            print("not_digit")
+            print("not_digit" + numbers)
             return (numbers)
+
 
         if numbers.count(".") > 1:
             return (numbers, "INVALID")
 
+
+        print("digit" + numbers)
         return numbers
 
     def tokenize_operation(self):
@@ -114,46 +123,8 @@ class Lexer:
         return delimeter
 
     def tokenize_special_characters(self):
-        print("special",self.current)
-        special_character = ""
-        quotes = ["'", '"']
-        if self.current in quotes:
-            value = ""
-            value += self.current
-            self.move()
-            while self.current not in quotes and self.current != None:
-                value += self.current
-                self.move()
-            value += self.current
-            self.move()
-
-            if value.endswith(("'", '"')):
-                return (value, "STRING")
-            else:
-                return (value, "INVALID")
-        elif self.current in comments:
-            value = ""
-            if self.current == "/":
-                while self.current != "\n" and self.current != None:
-                    value += self.current
-                    self.move()
-                if value.startswith("//"):
-                    return (value, "COMMENT")
-                else:
-                    return (value, "INVALID")
-            elif self.current == "#":
-                value += self.current
-                self.move()
-                while self.current != "#" and self.current != None:
-                    value += self.current
-                    self.move()
-                value += self.current
-                self.move()
-                if value.startswith("#") and value.endswith("#"):
-                    return (value, "MULTILINECOMMENT")
-                else:
-                    return (value, "INVALID")
-        elif self.current == "@":
+        # for at atomic data types
+        if self.current == "@":
             value = ""
             value += self.current
             self.move()
@@ -202,30 +173,96 @@ class Lexer:
                 return (value, "NOBLENAMELITERAL")
             else:
                 return (value, "INVALID")
-        elif self.current == "_":
-            value = ""
-            value += self.current
-            self.move()
-            while (self.current not in spaces and self.current != None and self.current not in special_characters and self.current not in delimeters and self.current not in operators) or self.current == "_":
-                value += self.current
-                self.move()
-            return (value, "IDENTIFIER")
 
-        else:
-            special_character += self.current
+
+        # for comments
+        if self.current == "/" and self.inp[self.index] == "/":
             self.move()
-            print("special characters",special_character)
+            self.move()
+            return ("//", "SINGLELINECOMMENT")
+
+        
+        # for identifiers
+        # if self.current == "_":
+        #     identifier = ""
+        #     valid_identifier = alphabet + "_" + digits
+            
+        #     while self.current not in spaces and self.current != None and self.current in valid_identifier:
+        #         identifier += self.current 
+        #         self.move()
+            
+        #     return 
+        # for special characters
+        special_character = self.current
+        self.move()
         return (special_character, special_characters[special_character])
+        # special_character = ""
+        # quotes = ["'", '"']
+        # if self.current in quotes:
+        #     value = ""
+        #     value += self.current
+        #     self.move()
+        #     while self.current not in quotes and self.current != None:
+        #         value += self.current
+        #         self.move()
+        #     value += self.current
+        #     self.move()
+
+        #     if value.endswith(("'", '"')):
+        #         return (value, "STRING")
+        #     else:
+        #         return (value, "INVALID")
+        # elif self.current in comments:
+        #     value = ""
+        #     if self.current == "/":
+        #         while self.current != "\n" and self.current != None:
+        #             value += self.current
+        #             self.move()
+        #         if value.startswith("//"):
+        #             return (value, "COMMENT")
+        #         else:
+        #             return (value, "INVALID")
+        #     elif self.current == "#":
+        #         value += self.current
+        #         self.move()
+        #         while self.current != "#" and self.current != None:
+        #             value += self.current
+        #             self.move()
+        #         value += self.current
+        #         self.move()
+        #         if value.startswith("#") and value.endswith("#"):
+        #             return (value, "MULTILINECOMMENT")
+        #         else:
+        #             return (value, "INVALID")
+        
+        # elif self.current == "_":
+        #     value = ""
+        #     value += self.current
+        #     self.move()
+        #     while (self.current not in spaces and self.current != None and self.current not in special_characters and self.current not in delimeters and self.current not in operators) or self.current == "_":
+        #         value += self.current
+        #         self.move()
+        #     return (value, "IDENTIFIER")
+
+        # else:
+        #     special_character += self.current
+        #     self.move()
+        #     print("special characters",special_character)
+        # return (special_character, special_characters[special_character])
 
     def tokenize_lexeme(self):
         lexeme = ""
+        valid_identifier = alphabet + "_" + digits
         identifier_valid = True
 
-        while (self.current not in spaces and self.current != None and self.current not in special_characters  and self.current not in delimeters and self.current not in operators) or self.current == "_":
+        while self.current not in spaces and self.current != None and self.current in valid_identifier:
             lexeme_accepted = self.current in digits or self.current in alphabet or self.current == "_"
-            if not lexeme_accepted:
+
+            if self.current not in valid_identifier:
                 identifier_valid = False
+
             lexeme += self.current
+
             self.move()
 
         if lexeme in keywords:
@@ -252,5 +289,6 @@ class Lexer:
 
 
 if __name__ == "__main__":
-    lexer = Lexer('num1 = 2;')
+    f = open("sample.atc", "r")
+    lexer = Lexer(f.read())
     print(lexer.to_token())

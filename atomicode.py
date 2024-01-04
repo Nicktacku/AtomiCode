@@ -41,7 +41,6 @@ elif len(argv) - 1 == 1 and argv[1].endswith("atc"):
     lexemes = atc.run_file(PATH)
 else:
     lexemes = atc.run_prompt()
-    
 # tokens = []
 # lexemes = []
 

@@ -19,3 +19,8 @@ if(true){
 def func(a, b){
     return a + b;
 }
+
+_1_ = 3;
+2_ = 2.1;
+
+out(_1_ + 2_);

@@ -1,12 +1,15 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
+	SINGLELINECOMMENT        //
+	IDENTIFIER               for
+	IDENTIFIER               the
+	IDENTIFIER               sample
 	IDENTIFIER               _1_
 	ASSIGN                   =
-	DIGIT                    3
+	DIGIT                    +3
 	DELIMETER                ;
-	DIGIT                    2
-	IDENTIFIER               _
+	IDENTIFIER               a_
 	ASSIGN                   =
 	FLOAT                    2.1
 	DELIMETER                ;
@@ -16,5 +19,9 @@
 	ADD                      +
 	DIGIT                    2
 	IDENTIFIER               _
+	ADD                      +
+	QUOTATIONMARK            "
+	ATOMICNUMBERLITERAL      @1
+	QUOTATIONMARK            "
 	RIGHTROUNDBRACKET        )
 	DELIMETER                ;
