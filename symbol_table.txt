@@ -5,6 +5,19 @@
 	IDENTIFIER               for
 	IDENTIFIER               the
 	IDENTIFIER               sample
+	KEYWORD                  def
+	IDENTIFIER               func
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               a
+	DELIMETER                ,
+	IDENTIFIER               b
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  return
+	IDENTIFIER               a
+	DIGIT                    +
+	IDENTIFIER               b
+	RIGHTCURLYBRACE          }
 	IDENTIFIER               _1_
 	ASSIGN                   =
 	DIGIT                    +3
@@ -12,6 +25,8 @@
 	IDENTIFIER               a_
 	ASSIGN                   =
 	FLOAT                    2.1
+	DIVIDE                   /
+	DIGIT                    100
 	DELIMETER                ;
 	KEYWORD                  out
 	LEFTROUNDBRACKET         (
@@ -21,7 +36,37 @@
 	IDENTIFIER               _
 	ADD                      +
 	QUOTATIONMARK            "
-	ATOMICNUMBERLITERAL      @1
+	IDENTIFIER               b
 	QUOTATIONMARK            "
 	RIGHTROUNDBRACKET        )
 	DELIMETER                ;
+	KEYWORD                  assuming
+	LEFTROUNDBRACKET         (
+	QUOTATIONMARK            "
+	IDENTIFIER               a
+	QUOTATIONMARK            "
+	EQUAL                    ==
+	DIGIT                    1
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               a_
+	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
+	RIGHTCURLYBRACE          }
+	KEYWORD                  while
+	LEFTROUNDBRACKET         (
+	DIGIT                    1
+	GREATERTHAN              >
+	DIGIT                    2
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	QUOTATIONMARK            "
+	IDENTIFIER               mababa
+	IDENTIFIER               p0
+	QUOTATIONMARK            "
+	RIGHTROUNDBRACKET        )
+	RIGHTCURLYBRACE          }

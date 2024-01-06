@@ -1,6 +1,18 @@
 // for the sample
 
-_1_ = +3;
-a_ = 2.1;
+def func(a, b){
+    return a + b
+}
 
-out(_1_ + 2_ + "@1");
+_1_ = +3;
+a_ = 2.1 / 100;
+
+out(_1_ + 2_ + "b");
+
+assuming("a" == 1){
+    out(a_);
+}
+
+while(1 > 2){
+    out("mababa p0")
+}

@@ -8,16 +8,19 @@ class Lexer:
         self.current = self.inp[self.index]
         self.lexemes = []
         self.tokens = []
+        
+        
 
     def to_token(self):
-        print(self.current)
         number_appeared = False
 
         while self.index < len(self.inp) and self.current != None:
-
             # skips out spaces
             if self.current in spaces:
                 self.move()
+                
+                if self.current is None:
+                    break
 
             # defines if its a comment or divide
             not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
@@ -31,7 +34,6 @@ class Lexer:
                     self.tokens.append(Float(output))
                 else:
                     self.tokens.append(Digit(output))
-
             elif self.current in digits:
                 number_appeared = True
                 output = self.tokenize_digit()
@@ -96,7 +98,7 @@ class Lexer:
 
 
         if not_digit:
-            print("not_digit" + numbers)
+
             return (numbers)
 
 
@@ -104,7 +106,7 @@ class Lexer:
             return (numbers, "INVALID")
 
 
-        print("digit" + numbers)
+
         return numbers
 
     def tokenize_operation(self):
@@ -135,7 +137,7 @@ class Lexer:
                 if self.current in upper_alphabet:
                     if self.inp[self.index + 1] in upper_alphabet:
                         break
-                print("value: ",value)
+
 
             if value in at_num:
                 return (value, "ATOMICNUMBERLITERAL")
