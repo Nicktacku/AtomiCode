@@ -23,24 +23,27 @@ class AtomiCode:
             self.had_error = False
             return lexer.to_token()
 
-    def error(self, line, message):
-        self.report(line, "", message)
+    # def error(self, line, message):
+    #     self.report(line, "", message)
 
-    def report(self, line, where, message):
-        print(f"[line {line}] Error {where}: {message}")
-        self.had_error = True
+    # def report(self, line, where, message):
+    #     print(f"[line {line}] Error {where}: {message}")
+    #     self.had_error = True
 
 atc = AtomiCode()
 
+print(len(argv))
+
 if len(argv) - 1 > 1:
     print("Usage: atomicode [script]")
-elif not argv[1].endswith("atc"):
-    print("wrong extention")
-elif len(argv) - 1 == 1 and argv[1].endswith("atc"):
+elif len(argv) == 2 and argv[1].endswith("atc"):
     PATH = argv[1]
     lexemes = atc.run_file(PATH)
-else:
+elif len(argv) == 1:
     lexemes = atc.run_prompt()
+elif not argv[1].endswith("atc"):
+    print("wrong extention")
+
 # tokens = []
 # lexemes = []
 
