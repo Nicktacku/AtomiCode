@@ -1,5 +1,23 @@
-_1_ = 3;
-2_ = 2.1;
+// for the sample
 
+<<<<<<< HEAD
 out(_1_ + 2_);
 out("hello");
+=======
+def func(a, b){
+    return a + b
+}
+
+_1_ = +3;
+a_ = 2.1 / 100;
+
+out(_1_ + 2_ + "b");
+
+assuming("a" == 1){
+    out(a_);
+}
+
+while(1 > 2){
+    out("mababa p0")
+}
+>>>>>>> lexer

@@ -1,16 +1,38 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
+	SINGLELINECOMMENT        //
+	IDENTIFIER               for
+	IDENTIFIER               the
+	IDENTIFIER               sample
+	KEYWORD                  def
+	IDENTIFIER               func
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               a
+	DELIMETER                ,
+	IDENTIFIER               b
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  return
+	IDENTIFIER               a
+	DIGIT                    +
+	IDENTIFIER               b
+	RIGHTCURLYBRACE          }
 	IDENTIFIER               _1_
 	ASSIGN                   =
-	DIGIT                    3
+	DIGIT                    +3
 	DELIMETER                ;
-	DIGIT                    2
-	IDENTIFIER               _
+	IDENTIFIER               a_
 	ASSIGN                   =
+<<<<<<< HEAD
 	DIGIT                    2
 	DELIMETER                .
 	DIGIT                    1
+=======
+	FLOAT                    2.1
+	DIVIDE                   /
+	DIGIT                    100
+>>>>>>> lexer
 	DELIMETER                ;
 	KEYWORD                  out
 	LEFTROUNDBRACKET         (
@@ -18,10 +40,47 @@
 	ADD                      +
 	DIGIT                    2
 	IDENTIFIER               _
+	ADD                      +
+	QUOTATIONMARK            "
+	IDENTIFIER               b
+	QUOTATIONMARK            "
 	RIGHTROUNDBRACKET        )
 	DELIMETER                ;
+<<<<<<< HEAD
 	KEYWORD                  out
 	LEFTROUNDBRACKET         (
 	STRING                   "hello"
 	RIGHTROUNDBRACKET        )
 	DELIMETER                ;
+=======
+	KEYWORD                  assuming
+	LEFTROUNDBRACKET         (
+	QUOTATIONMARK            "
+	IDENTIFIER               a
+	QUOTATIONMARK            "
+	EQUAL                    ==
+	DIGIT                    1
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               a_
+	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
+	RIGHTCURLYBRACE          }
+	KEYWORD                  while
+	LEFTROUNDBRACKET         (
+	DIGIT                    1
+	GREATERTHAN              >
+	DIGIT                    2
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	QUOTATIONMARK            "
+	IDENTIFIER               mababa
+	IDENTIFIER               p0
+	QUOTATIONMARK            "
+	RIGHTROUNDBRACKET        )
+	RIGHTCURLYBRACE          }
+>>>>>>> lexer
