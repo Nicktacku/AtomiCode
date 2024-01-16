@@ -8,7 +8,9 @@
 	DIGIT                    2
 	IDENTIFIER               _
 	ASSIGN                   =
-	FLOAT                    2.1
+	DIGIT                    2
+	DELIMETER                .
+	DIGIT                    1
 	DELIMETER                ;
 	KEYWORD                  out
 	LEFTROUNDBRACKET         (
@@ -16,5 +18,10 @@
 	ADD                      +
 	DIGIT                    2
 	IDENTIFIER               _
+	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	STRING                   "hello"
 	RIGHTROUNDBRACKET        )
 	DELIMETER                ;

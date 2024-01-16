@@ -41,7 +41,7 @@ elif len(argv) - 1 == 1 and argv[1].endswith("atc"):
     lexemes = atc.run_file(PATH)
 else:
     lexemes = atc.run_prompt()
-    
+
 # tokens = []
 # lexemes = []
 
@@ -50,6 +50,7 @@ f = open("symbol_table.txt", "w")
 f.write("-"*40 + "\n")
 f.write("|" + "\t" + "Tokens" + "\t"*5 + "Lexemes" + " "*4 + "|" + "\n")
 f.write("-"*40 + "\n")
+
 for line in new_lexemes:
     f.write("\t" + line + "\n")
 

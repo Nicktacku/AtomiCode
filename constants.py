@@ -76,7 +76,8 @@ comments = {
 
 delimeters = {
     ";" : "SEMICOLON",
-    "," : "COMMA"
+    "," : "COMMA",
+    ".": "PERIOD"
 }
 
 booleans = {
