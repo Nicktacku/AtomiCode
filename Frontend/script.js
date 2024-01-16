@@ -28,6 +28,7 @@ async function showResult() {
 
   for (let i = 0; i < lexeme.length; i++) {
     let listItem = document.createElement("li");
+    listItem.setAttribute("class", "list-item");
 
     listItem.textContent = lexeme[i];
 
@@ -42,6 +43,7 @@ async function showResult() {
 
   for (let i = 0; i < token.length; i++) {
     let listItem = document.createElement("li");
+    listItem.setAttribute("class", "list-item");
 
     listItem.textContent = token[i];
 

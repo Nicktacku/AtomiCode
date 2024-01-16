@@ -5,6 +5,7 @@
 	IDENTIFIER               for
 	IDENTIFIER               the
 	IDENTIFIER               sample
+	KEYWORD                  out
 	KEYWORD                  def
 	IDENTIFIER               func
 	LEFTROUNDBRACKET         (
@@ -17,6 +18,7 @@
 	IDENTIFIER               a
 	DIGIT                    +
 	IDENTIFIER               b
+	DELIMETER                ;
 	RIGHTCURLYBRACE          }
 	IDENTIFIER               _1_
 	ASSIGN                   =
@@ -24,15 +26,9 @@
 	DELIMETER                ;
 	IDENTIFIER               a_
 	ASSIGN                   =
-<<<<<<< HEAD
-	DIGIT                    2
-	DELIMETER                .
-	DIGIT                    1
-=======
 	FLOAT                    2.1
 	DIVIDE                   /
 	DIGIT                    100
->>>>>>> lexer
 	DELIMETER                ;
 	KEYWORD                  out
 	LEFTROUNDBRACKET         (
@@ -46,13 +42,6 @@
 	QUOTATIONMARK            "
 	RIGHTROUNDBRACKET        )
 	DELIMETER                ;
-<<<<<<< HEAD
-	KEYWORD                  out
-	LEFTROUNDBRACKET         (
-	STRING                   "hello"
-	RIGHTROUNDBRACKET        )
-	DELIMETER                ;
-=======
 	KEYWORD                  assuming
 	LEFTROUNDBRACKET         (
 	QUOTATIONMARK            "
@@ -78,9 +67,63 @@
 	KEYWORD                  out
 	LEFTROUNDBRACKET         (
 	QUOTATIONMARK            "
-	IDENTIFIER               mababa
-	IDENTIFIER               p0
+	IDENTIFIER               hey
 	QUOTATIONMARK            "
 	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
 	RIGHTCURLYBRACE          }
->>>>>>> lexer
+	IDENTIFIER               a_
+	DELIMETER                .
+	IDENTIFIER               sum
+	LEFTROUNDBRACKET         (
+	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
+	IDENTIFIER               kelvin
+	ASSIGN                   =
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               fahrenheit
+	DIGIT                    -
+	DIGIT                    32
+	RIGHTROUNDBRACKET        )
+	MULTIPLY                 *
+	DIGIT                    5
+	DIVIDE                   /
+	DIGIT                    9
+	ADD                      +
+	FLOAT                    273.15
+	KEYWORD                  def
+	IDENTIFIER               avogadro_law
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               v1
+	DELIMETER                ,
+	IDENTIFIER               n1
+	DELIMETER                ,
+	IDENTIFIER               v2
+	DELIMETER                ,
+	IDENTIFIER               n2
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  return
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               v1
+	DIVIDE                   /
+	IDENTIFIER               n1
+	RIGHTROUNDBRACKET        )
+	EQUAL                    ==
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               v2
+	DIVIDE                   /
+	IDENTIFIER               n2
+	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
+	RIGHTCURLYBRACE          }
+	KEYWORD                  out
+	LEFTROUNDBRACKET         (
+	QUESTIONMARK             ?
+	ALKALISYMBOLLITERAL      @H
+	BALANCINGARROW           ==>
+	NONMETALSYMBOLLITERAL    H
+	QUESTIONMARK             ?
+	RIGHTROUNDBRACKET        )
+	DELIMETER                ;
+	INVALID                  $

@@ -1,3 +1,6 @@
+# return invalid when character does not belong
+# continue scanning after invalid
+
 from constants import *
 from Tokens import *
 
@@ -8,13 +11,13 @@ class Lexer:
         self.current = self.inp[self.index]
         self.lexemes = []
         self.tokens = []
-        
-        
+
 
     def to_token(self):
         number_appeared = False
 
         while self.index < len(self.inp) and self.current != None:
+            print(self.current)
             # skips out spaces
             if self.current in spaces:
                 self.move()
@@ -74,6 +77,17 @@ class Lexer:
                     if output == None:
                         return Invalid(self.current)
                     self.tokens.append(Float(output))
+            else:
+                if self.current in spaces:
+                    self.move()
+                else:
+                    invalid = self.current
+                    self.tokens.append(Invalid(invalid))
+                    self.move()
+
+                if self.current is None:
+                    break
+
         return self.tokens
 
     def move(self):
@@ -98,7 +112,6 @@ class Lexer:
 
 
         if not_digit:
-
             return (numbers)
 
 
@@ -122,7 +135,10 @@ class Lexer:
     def tokenize_delimeter(self):
         delimeter = self.current
         self.move()
-        return delimeter
+        if delimeter in delimeters:
+            return delimeter
+        else:
+            return (delimeter, "INVALID")
 
     def tokenize_special_characters(self):
         # for at atomic data types
