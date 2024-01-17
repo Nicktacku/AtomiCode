@@ -2,11 +2,60 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <link href="home.css" rel="stylesheet" />
     <title>HOME</title>
   </head>
   <body>
-    <div>
-      <link href="home.css" rel="stylesheet" />
+    <div class="nav-bar">
+      <div class="icons">
+        <div class="elements">
+      <img alt="logo" src="assets/logo.png" class="logo" />
+      <img alt="image" src="assets/logo_text.png" class="logo-text" />
+         </div>
+         <svg
+         viewBox="0 0 808.5942857142857 1024"
+         class="home-run"
+         id="home-run">
+         <path
+           d="M790.857 529.714l-758.857 421.714c-17.714 9.714-32 1.143-32-18.857v-841.143c0-20 14.286-28.571 32-18.857l758.857 421.714c17.714 9.714 17.714 25.714 0 35.429z"
+         ></path></svg>
+    </div>
+    </div>
+    <div class="bg">
+    <div class="body">
+        <div>
+          <h1 class="home-source-code-label">SOURCE CODE:</h1>
+          <div class="home-source-code-container">
+            <textarea
+            type="text"
+            class="home-for-source-code-typings"
+            id="home-for-source-code-typings"
+            name="home-for-source-code-typings"
+            ></textarea>
+          </div>
+        </div>
+        <div>
+          <h1 class="home-lexical-analyzer-label">LEXICAL ANALYZER RESULT:</h1>
+          <div class="container">
+            <div class="home-container">
+              <h1 class="home-text05">LEXEMES:</h1>
+              <ul class="home-text05" id="home-text05"></ul>
+            </div>
+
+
+            <div class="home-container">
+              <h1 class="home-text06">TOKENS:</h1>
+              <ul class="home-text06" id="home-text06"></ul>
+            </div>
+          </div>
+
+
+        </div>
+    </div>
+  </div>
+
+
+  <!--  <div>
       <div class="home-container">
         <header data-thq="thq-navbar" class="home-navbar-interactive">
           <img alt="logo" src="assets/logo.png" class="home-logo" />
@@ -118,8 +167,11 @@
           <h1 class="home-lexical-analyzer-label">LEXICAL ANALYZER RESULT:</h1>
         </div>
       </div>
-    </div>
+    </div> -->
+
 
     <script src="script.js" defer></script>
   </body>
 </html>
+
+
