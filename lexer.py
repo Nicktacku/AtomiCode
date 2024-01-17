@@ -1,15 +1,16 @@
 from constants import *
 from Tokens import *
 
+#INPUT
 class Lexer:
     def __init__(self, inp):
         self.inp = inp
-        self.index = 0
+        self.index = 0 #Scan
         self.current = self.inp[self.index]
         self.lexemes = []
         self.tokens = []
 
-
+#converter to token
     def to_token(self):
         number_appeared = False
 
@@ -137,8 +138,8 @@ class Lexer:
             return (delimeter, "INVALID")
 
     def tokenize_special_characters(self):
-        # for at atomic data types
-        if self.current == "@":
+        # for at atomic data types and special characters 
+        if self.current == "@": #starts with at
             value = ""
             value += self.current
             self.move()
