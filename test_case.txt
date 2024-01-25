@@ -1,0 +1,26 @@
+b = 1;
+
+c = 1 + 2;
+
+out("hello world");
+
+out("hell0 w0rld");
+
+// tets
+
+# multi line
+gagana
+kaya #
+
+if(true){
+    out(r.find(t));
+}
+
+def func(a, b){
+    return a + b;
+}
+
+_1_ = 3;
+2_ = 2.1;
+
+out(_1_ + 2_);

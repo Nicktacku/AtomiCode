@@ -70,13 +70,14 @@ special_characters = {
 }
 
 comments = {
-    "/" : "COMMENT",
+    "//" : "COMMENT",
     "#" : "MULTILINECOMMENT"
 }
 
 delimeters = {
     ";" : "SEMICOLON",
-    "," : "COMMA"
+    "," : "COMMA",
+    ".": "PERIOD"
 }
 
 booleans = {

@@ -1,0 +1,119 @@
+.nav-bar {
+  margin: 0;
+  overflow: hidden;
+  padding: 10px 10px 10px 10px;
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0.00%,rgba(195, 151, 151, 0.8) 100.00%);
+}
+.nav-bar .icons{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px dashed rgba(120, 120, 120, 0.4);
+  margin: 0;
+}
+
+
+.nav-bar .icons .elements{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+.nav-bar .icons .elements .logo {
+  height: 81px;
+}
+.nav-bar .icons .elements .logo-text {
+  width: 180px;
+}
+
+
+.home-run {
+  width: 33px;
+  height: 33px;
+  cursor: pointer;
+  padding-right: 50px;
+}
+
+
+.bg {
+  background-image: linear-gradient(180deg, rgba(254, 172, 94, 0.5) 0.00%,rgba(199, 121, 208, 0.77) 50.00%,rgba(75, 192, 200, 0.34) 100.00%);
+}
+.bg .body {
+ padding: 30px 50px 50px 50px;
+ max-width: calc(100% - 300px);
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ grid-gap: 10px;
+}
+
+
+.body .home-source-code-container {
+  width: 524px;
+  height: 726px;
+  margin-top: 70px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  padding-top: var(--dl-space-space-oneandhalfunits);
+  border-color: #1d1d1d;
+  border-style: solid;
+  border-width: 2px;
+  flex-direction: column;
+  background-color: #000000;
+}
+.body .home-for-source-code-typings {
+  margin-top: 33px;
+  margin-left: 26px;
+  color: rgb(0, 0, 0);
+  position: absolute;
+  font-size: 30px;
+  font-weight: 300;
+  height: 90%;
+  width: 90%;
+}
+.body .home-source-code-label {
+  position: absolute;
+}
+.body .home-lexical-analyzer-label {
+  position: absolute;
+  left: 30%;
+}
+
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+
+}
+.container .home-container {
+  margin-top: 70px;
+  margin-left: 50px;
+  width: 550px;
+  height: 1500px;
+  border-color: #1d1d1d;
+  border-style: solid;
+  border-width: 2px;
+  background-image: linear-gradient(90deg, rgb(194, 229, 156) 0.00%,rgba(100, 179, 244, 0.44) 100.00%);
+}
+
+
+.container .home-container .home-text05 {
+  position: absolute;
+  padding-left: 25px;
+}
+
+
+.container .home-container .home-text06 {
+  position: absolute;
+  padding-left: 25px;
+}
+
+.list {
+  margin-top: 20%;
+  font-size: 2rem;
+  list-style-type: none;
+}
+

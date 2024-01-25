@@ -1,4 +1,31 @@
-_1_ = 3;
-2_ = 2.1;
+// for the sample out
 
-out(_1_ + 2_);
+def func(a, b){
+    return a + b;
+}
+
+_1_ = +3;
+a_ = 2.1 / 100;
+
+out(_1_ + 2_ + "b");
+
+assuming("a" == 1){
+    out(a_);
+}
+
+while(1 > 2){
+    out("hey");
+}
+
+a_.sum();
+
+kelvin = (fahrenheit - 32) * 5/9 + 273.15
+
+
+def avogadro_law(v1, n1, v2, n2){
+    return (v1 / n1) == (v2 / n2);
+}
+
+out(?@H ==> H?);
+
+$
