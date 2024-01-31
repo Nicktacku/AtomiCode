@@ -30,6 +30,15 @@ operators = {
     "==>" : "BALANCINGARROW"
 }
 
+assignments = {
+    "=" : "ASSIGN",
+    "+=" : "ADDASSIGN",
+    "-=" : "SUBTRACTASSIGN",
+    "*=" : "MULTIPLYASSIGN",
+    "/=" : "DIVIDEASSIGN",
+    "%=" : "MODULOASSIGN"
+}
+
 keywords = [
     "assuming",
     "break",

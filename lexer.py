@@ -8,13 +8,24 @@ class Lexer:
         self.current = self.inp[self.index]
         self.lexemes = []
         self.tokens = []
+        self.errors = []
 
 
     def to_token(self):
         number_appeared = False
+        operator_appeared = False
+        opening_appeared = False
+        function_appeared = False
+        parenthesis_appeared = False
+        curly_braces_appeared = False
+        identifier_appeared = False
+        keyword_appeared = False
+        
+        parenthesis_closed = False
         is_string = False
 
         while self.index < len(self.inp) and self.current != None:
+            
             print("starting ", self.current)
             # skips out spaces
             if self.current in spaces:
@@ -27,11 +38,17 @@ class Lexer:
             # defines if its a comment or divide
             not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
 
-            if (self.current == "-" or self.current == "+") and number_appeared:
+            if (self.current == "-" or self.current == "+") and not number_appeared and self.inp[self.index + 1] in digits:
                 print("detected digit 1", self.current)
+
+                has_error = function_appeared or identifier_appeared or number_appeared or (parenthesis_appeared and function_appeared)
+
                 number_appeared = True
+                operator_appeared = False
+
+
                 output = self.tokenize_digit()
-                if "INVALID" in output:
+                if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 elif "." in output:
                     self.tokens.append(Float(output))
@@ -40,41 +57,87 @@ class Lexer:
                 
             elif self.current in digits:
                 print("detected digit 2 ", self.current)
+
+                has_error = function_appeared or identifier_appeared or number_appeared or (parenthesis_appeared and function_appeared)
+                
                 number_appeared = True
+                operator_appeared = False
+
                 output = self.tokenize_digit()
-                if "INVALID" in output:
+                if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 elif "." in output:
                     self.tokens.append(Float(output))
                 else:
                     self.tokens.append(Digit(output))
-                    
+
             elif (self.current in operators or self.current in ["&", "|"]) and not_comment:
                 print("operators ", self.current)
-                number_appeared = False
-
                 output = self.tokenize_operation()
 
-                if "INVALID" in output:
+                if not number_appeared:
+                    print("NOT VALID")
+                    self.errors.append("invalid before operation")
+
+                if output[0] in assignments:
+                    has_error = not identifier_appeared
+                    identifier_appeared = False
+                    operator_appeared = True
+                    number_appeared = False
+                else:
+                    has_error = function_appeared or operator_appeared or (identifier_appeared and function_appeared) or (parenthesis_appeared and function_appeared)
+                    number_appeared = False
+                    operator_appeared = True
+                    identifier_appeared = False
+
+                
+
+                if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Operator(output[0], output[1]))
-                
+
             elif self.current in delimeters:
                 print("delimeters ", self.current)
+
+                before_parenthesis = parenthesis_appeared and not (number_appeared or identifier_appeared or string_appeared)
+
+                has_error = operator_appeared or (function_appeared and not identifier_appeared) or before_parenthesis
+                print(operator_appeared)
+
+                number_appeared = False
+                identifier_appeared = False
+                string_appeared = False
+
                 output = self.tokenize_delimeter()
-                if "INVALID" in output:
+                if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Delimeter(output))
-                
+
             elif self.current in alphabet:
                 print("alphabet ", self.current)
 
                 output = self.tokenize_lexeme(is_string)
 
-                    
-                if "INVALID" in output:
+                if output[1] == "IDENTIFIER" and function_appeared:
+                    identifier_appeared = True
+                    has_error = operator_appeared or number_appeared
+                elif output[1] == "IDENTIFIER":
+                    has_error = number_appeared or (function_appeared and output[0] != "def") or identifier_appeared
+                    number_appeared = True
+                    identifier_appeared = True
+                    operator_appeared = False
+                elif output[0] == "def":
+                    has_error = operator_appeared or number_appeared or function_appeared or parenthesis_appeared
+                    function_appeared = True
+                elif operator_appeared:
+                    self.errors.append("invalid after operation")
+                else:
+                    has_error = keyword_appeared
+                    keyword_appeared = True
+
+                if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Lexeme(output[0], output[1]))
@@ -82,21 +145,23 @@ class Lexer:
             elif self.current in special_characters:
                 quotations = ["'", '"']
                 print("special characters ", self.current)
+                has_error = operator_appeared or number_appeared or function_appeared or identifier_appeared
+
                 if self.current in quotations:
                     output = self.tokenize_string()
-                    if "INVALID" in output:
+                    if "INVALID" in output or has_error:
                         self.tokens.append(Invalid(output[0]))
                     else:
                         self.tokens.append(SpecialChar(output[0], output[1]))
 
                     output = self.tokenize_string()
-                    if "INVALID" in output:
+                    if "INVALID" in output or has_error:
                         self.tokens.append(Invalid(output[0]))
                     else:
                         self.tokens.append(Lexeme(output[0], output[1]))
 
                     output = self.tokenize_string()
-                    if "INVALID" in output:
+                    if "INVALID" in output or has_error:
                         self.tokens.append(Invalid(output[0]))
                     else:
                         self.tokens.append(SpecialChar(output[0], output[1]))
@@ -105,21 +170,46 @@ class Lexer:
                     output = self.tokenize_lexeme()
                 else:
                     output = self.tokenize_special_characters()
+
+                if output[0] == "(":
+                    has_error = operator_appeared or (number_appeared and not identifier_appeared) or (function_appeared and not identifier_appeared) or parenthesis_appeared
+                    print(number_appeared and not identifier_appeared)
+                    identifier_appeared = False
+                    parenthesis_appeared = True
+                elif output[0] == "{":
+                    has_error = operator_appeared or identifier_appeared or (function_appeared and not parenthesis_closed) or number_appeared
+                    print(identifier_appeared)
+                    function_appeared = False
+                    identifier_appeared = False
+
+                if output[0] in [")"] and (number_appeared or identifier_appeared):
+                    parenthesis_appeared = False
+                    parenthesis_closed = True
+                    identifier_appeared = False
+                    self.tokens.append(SpecialChar(output[0], output[1]))
+                elif output[0] in ["}"] and (number_appeared or identifier_appeared):
+                    curly_braces_appeared = False
                     
-                if "INVALID" in output:
+                    self.tokens.append(SpecialChar(output[0], output[1]))
+                elif "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     print(self.current)
                     self.tokens.append(SpecialChar(output[0], output[1]))
-                
+
             elif self.current == ".":
+                number_appeared = True
+                operator_appeared = False
+
+                has_error = function_appeared or identifier_appeared or (parenthesis_appeared and function_appeared)
+
                 print("float", self.current)
                 output = self.tokenize_digit()
-                if output == None:
+                if output == None or has_error:
                     return Invalid(self.current)
                 else:
                     self.tokens.append(Float(output))
-                
+
             else:
                 print("else checker ", self.current)
                 if self.current in spaces:
@@ -135,7 +225,7 @@ class Lexer:
 
                 if self.current is None:
                     break
-
+        print("errors", self.errors)
         return self.tokens
 
     def move(self):
@@ -153,14 +243,18 @@ class Lexer:
 
         while self.current not in spaces and self.current != None and self.current in valid_digits:
             numbers += self.current
-            self.move()
+            print("here in number")
             if self.current not in valid_digits:
                 not_digit = True
                 while self.current not in spaces and self.current != None:
                     numbers += self.current
                     self.move()
+            else:
+                self.move()
+                if self.current in ["+", "-"]:
+                    break
 
-                
+
 
 
         if not_digit:
@@ -176,7 +270,7 @@ class Lexer:
 
     def tokenize_operation(self):
         operator = ""
-        while self.current != " " and self.current != None and self.current not in digits:
+        while self.current != " " and self.current != None and self.current not in digits and self.current not in delimeters:
             operator += self.current
             self.move()
         if operator in operators:

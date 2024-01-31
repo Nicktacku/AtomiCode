@@ -1,27 +1,8 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	SINGLELINECOMMENT        //
-	IDENTIFIER               for
-	IDENTIFIER               the
-	IDENTIFIER               sample
-	KEYWORD                  out
 	KEYWORD                  def
-	IDENTIFIER               func
-	LEFTROUNDBRACKET         (
-	IDENTIFIER               a
-	DELIMETER                ,
-	IDENTIFIER               b
-	RIGHTROUNDBRACKET        )
-	LEFTCURLYBRACE           {
-	KEYWORD                  return
-	IDENTIFIER               a
-	INVALID                  +++
-	IDENTIFIER               b
-	DELIMETER                ;
-	RIGHTCURLYBRACE          }
-	QUOTATIONMARK            "
-	STRING                   1a
-	QUOTATIONMARK            "
-	INVALID                  $$$
-	INVALID                  1a
+	INVALID                  =
+	INVALID                  1
+	INVALID                  +
+	INVALID                  1
