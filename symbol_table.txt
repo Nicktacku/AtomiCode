@@ -2,7 +2,24 @@
 |	Tokens					Lexemes    |
 ----------------------------------------
 	KEYWORD                  def
-	INVALID                  =
+	IDENTIFIER               sum
+	LEFTROUNDBRACKET         (
 	INVALID                  1
-	INVALID                  +
-	INVALID                  1
+	INVALID                  ,
+	IDENTIFIER               b
+	DELIMETER                ,
+	IDENTIFIER               c
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	IDENTIFIER               result
+	ASSIGN                   =
+	IDENTIFIER               a
+	ADD                      +
+	IDENTIFIER               b
+	ADD                      +
+	IDENTIFIER               c
+	KEYWORD                  return
+	INVALID                  result
+	DELIMETER                ;
+	RIGHTCURLYBRACE          }
+	DELIMETER                ;

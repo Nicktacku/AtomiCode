@@ -1,10 +1,12 @@
 from constants import *
 from Tokens import *
+from Errors import *
 
 class Lexer:
     def __init__(self, inp):
         self.inp = inp
         self.index = 0
+        self.line = 1
         self.current = self.inp[self.index]
         self.lexemes = []
         self.tokens = []
@@ -12,37 +14,76 @@ class Lexer:
 
 
     def to_token(self):
+        global number_appeared
         number_appeared = False
+        global operator_appeared
         operator_appeared = False
+        global string_appeared
+        string_appeared = False
+        global opening_appeared
         opening_appeared = False
+        global function_appeared
         function_appeared = False
+        global parenthesis_appeared
         parenthesis_appeared = False
+        global curly_braces_appeared
         curly_braces_appeared = False
+        global identifier_appeared
         identifier_appeared = False
+        global keyword_appeared
         keyword_appeared = False
-        
+        global conditional_appeared
+        conditional_appeared = False
+        global loop_appeared
+        loop_appeared = False
+        global semicolon_appeared
+        semicolon_appeared = False
+
+        global parenthesis_closed
         parenthesis_closed = False
+
         is_string = False
 
         while self.index < len(self.inp) and self.current != None:
-            
             print("starting ", self.current)
             # skips out spaces
             if self.current in spaces:
                 print("space moved ", self.current)
-                self.move()
+                print("semicolon ", semicolon_appeared)
+
+                if ("\n" in self.current) and not semicolon_appeared:
+                    print("semicolon not found")
+                    self.errors.append(SyntaxError("missing semicolon", self.line))
+                elif "\n" in self.current:
+                    semicolon_appeared = False
+
+                self.move(semicolon_appeared)
+
                 if self.current is None:
                     print("in none ", self.current)
                     break
 
+                    print("nag move na pre")
+                
+
             # defines if its a comment or divide
             not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
 
+            # *NUMBER WITH SIGN
             if (self.current == "-" or self.current == "+") and not number_appeared and self.inp[self.index + 1] in digits:
                 print("detected digit 1", self.current)
 
                 has_error = function_appeared or identifier_appeared or number_appeared or (parenthesis_appeared and function_appeared)
 
+                if parenthesis_appeared and function_appeared:
+                    self.errors.append(SyntaxError("invalid after function keyword", self.line))
+                elif identifier_appeared:
+                    self.errors.append(SyntaxError("invalid after an identifier", self.line))
+                elif number_appeared:
+                    self.errors.append(SyntaxError("invalid after an number", self.line))
+                elif function_appeared:
+                    self.errors.append(SyntaxError("invalid parameter for function", self.line))
+
                 number_appeared = True
                 operator_appeared = False
 
@@ -54,12 +95,16 @@ class Lexer:
                     self.tokens.append(Float(output))
                 else:
                     self.tokens.append(Digit(output))
-                
+
+            # *DIGITS
             elif self.current in digits:
                 print("detected digit 2 ", self.current)
 
                 has_error = function_appeared or identifier_appeared or number_appeared or (parenthesis_appeared and function_appeared)
                 
+                if function_appeared:
+                    self.errors.append(SyntaxError("invalid after function keyword", self.line))
+                
                 number_appeared = True
                 operator_appeared = False
 
@@ -71,12 +116,14 @@ class Lexer:
                 else:
                     self.tokens.append(Digit(output))
 
+            # *OPERATORS
             elif (self.current in operators or self.current in ["&", "|"]) and not_comment:
                 print("operators ", self.current)
                 output = self.tokenize_operation()
 
-                if not number_appeared:
+                if not number_appeared and not identifier_appeared:
                     print("NOT VALID")
+                    print(not number_appeared and not identifier_appeared)
                     self.errors.append("invalid before operation")
 
                 if output[0] in assignments:
@@ -90,13 +137,12 @@ class Lexer:
                     operator_appeared = True
                     identifier_appeared = False
 
-                
-
                 if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Operator(output[0], output[1]))
 
+            # *DELIMETERS
             elif self.current in delimeters:
                 print("delimeters ", self.current)
 
@@ -109,12 +155,19 @@ class Lexer:
                 identifier_appeared = False
                 string_appeared = False
 
+
                 output = self.tokenize_delimeter()
+                
+                if output == ";":
+                    print("HELLO")
+                    semicolon_appeared = True
+                
                 if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Delimeter(output))
 
+            # *ALPHABET*
             elif self.current in alphabet:
                 print("alphabet ", self.current)
 
@@ -125,23 +178,35 @@ class Lexer:
                     has_error = operator_appeared or number_appeared
                 elif output[1] == "IDENTIFIER":
                     has_error = number_appeared or (function_appeared and output[0] != "def") or identifier_appeared
-                    number_appeared = True
+                    print(number_appeared)
                     identifier_appeared = True
                     operator_appeared = False
+
                 elif output[0] == "def":
                     has_error = operator_appeared or number_appeared or function_appeared or parenthesis_appeared
                     function_appeared = True
+                elif output[0] == "iter":
+                    has_error = False # lagay lahat
+                    loop_appeared = True
+                elif output[0] == "in":
+                    has_error = loop_appeared and not identifier_appeared
+
+                    if not has_error:
+                        identifier_appeared = False
+                        number_appeared = False
                 elif operator_appeared:
                     self.errors.append("invalid after operation")
                 else:
                     has_error = keyword_appeared
                     keyword_appeared = True
+                    print("AKO ANG LUMITAW")
 
                 if "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Lexeme(output[0], output[1]))
-                
+
+            # *SPECIAL CHARACTERS
             elif self.current in special_characters:
                 quotations = ["'", '"']
                 print("special characters ", self.current)
@@ -177,19 +242,23 @@ class Lexer:
                     identifier_appeared = False
                     parenthesis_appeared = True
                 elif output[0] == "{":
-                    has_error = operator_appeared or identifier_appeared or (function_appeared and not parenthesis_closed) or number_appeared
-                    print(identifier_appeared)
+                    has_error = operator_appeared or (identifier_appeared and not loop_appeared) or (function_appeared and not parenthesis_closed) or number_appeared
+                    print(number_appeared)
                     function_appeared = False
                     identifier_appeared = False
+                    semicolon_appeared = True
 
                 if output[0] in [")"] and (number_appeared or identifier_appeared):
                     parenthesis_appeared = False
                     parenthesis_closed = True
                     identifier_appeared = False
+                    number_appeared = False
+                    keyword_appeared = False
                     self.tokens.append(SpecialChar(output[0], output[1]))
-                elif output[0] in ["}"] and (number_appeared or identifier_appeared):
+                elif output[0] in ["}"] and (number_appeared or identifier_appeared or semicolon_appeared):
                     curly_braces_appeared = False
-                    
+                    print("HELLO MY PREND")
+
                     self.tokens.append(SpecialChar(output[0], output[1]))
                 elif "INVALID" in output or has_error:
                     self.tokens.append(Invalid(output[0]))
@@ -197,6 +266,7 @@ class Lexer:
                     print(self.current)
                     self.tokens.append(SpecialChar(output[0], output[1]))
 
+            # *FLOAT
             elif self.current == ".":
                 number_appeared = True
                 operator_appeared = False
@@ -213,27 +283,29 @@ class Lexer:
             else:
                 print("else checker ", self.current)
                 if self.current in spaces:
-                    self.move()
+                    self.move(semicolon_appeared)
                 else:
                     invalid = ""
-                    
                     while self.current not in spaces and self.current is not None:
                         invalid += self.current
-                        self.move()
+                        self.move(semicolon_appeared)
                     self.tokens.append(Invalid(invalid))
-                    
 
                 if self.current is None:
                     break
+        print("total lines: ",self.line)
         print("errors", self.errors)
         return self.tokens
 
-    def move(self):
+    def move(self, semicolon_appeared):
         self.index += 1
         if self.index < len(self.inp):
             self.current = self.inp[self.index]
+            if "\n" in self.current:
+                self.line += 1
         else:
             self.current = None
+            print("semicolon: ", semicolon_appeared)
 
     def tokenize_digit(self):
         numbers = ""
@@ -248,23 +320,17 @@ class Lexer:
                 not_digit = True
                 while self.current not in spaces and self.current != None:
                     numbers += self.current
-                    self.move()
+                    self.move(semicolon_appeared)
             else:
-                self.move()
+                self.move(semicolon_appeared)
                 if self.current in ["+", "-"]:
                     break
-
-
-
 
         if not_digit:
             return (numbers, "INVALID")
 
-
         if numbers.count(".") > 1:
             return (numbers, "INVALID")
-
-
 
         return numbers
 
@@ -272,7 +338,7 @@ class Lexer:
         operator = ""
         while self.current != " " and self.current != None and self.current not in digits and self.current not in delimeters:
             operator += self.current
-            self.move()
+            self.move(semicolon_appeared)
         if operator in operators:
             return (operator, operators[operator])
         else:
@@ -280,7 +346,7 @@ class Lexer:
 
     def tokenize_delimeter(self):
         delimeter = self.current
-        self.move()
+        self.move(semicolon_appeared)
         if delimeter in delimeters:
             return delimeter
         else:
@@ -291,10 +357,10 @@ class Lexer:
         if self.current == "@":
             value = ""
             value += self.current
-            self.move()
+            self.move(semicolon_appeared)
             while self.current != None and self.current not in spaces and self.current not in operators and self.current not in special_characters:
                 value += self.current
-                self.move()
+                self.move(semicolon_appeared)
 
                 if self.current in upper_alphabet:
                     if self.inp[self.index + 1] in upper_alphabet:
@@ -341,13 +407,13 @@ class Lexer:
 
         # for comments
         if self.current == "/" and self.inp[self.index] == "/":
-            self.move()
-            self.move()
+            self.move(semicolon_appeared)
+            self.move(semicolon_appeared)
             return ("//", "SINGLELINECOMMENT")
 
         
         special_character = self.current
-        self.move()
+        self.move(semicolon_appeared)
         return (special_character, special_characters[special_character])
 
 
@@ -364,7 +430,7 @@ class Lexer:
 
             lexeme += self.current
 
-            self.move()
+            self.move(semicolon_appeared)
         if is_string:
             return(lexeme, "STRING")
         elif lexeme in keywords:
@@ -395,12 +461,12 @@ class Lexer:
         
         if self.current in quotations:
             value += self.current
-            self.move()
+            self.move(semicolon_appeared)
             return (value, special_characters[value])
         else:
             while self.current != None and self.current not in quotations:
                 value += self.current
-                self.move()
+                self.move(semicolon_appeared)
             return (value, "STRING")
 
 
