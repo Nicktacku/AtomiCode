@@ -14,6 +14,35 @@ class Lexer:
 
 
     def to_token(self):
+        global number_appeared
+        number_appeared = False
+        global operator_appeared
+        operator_appeared = False
+        global string_appeared
+        string_appeared = False
+        global opening_appeared
+        opening_appeared = False
+        global function_appeared
+        function_appeared = False
+        global parenthesis_appeared
+        parenthesis_appeared = False
+        global curly_braces_appeared
+        curly_braces_appeared = False
+        global identifier_appeared
+        identifier_appeared = False
+        global keyword_appeared
+        keyword_appeared = False
+        global conditional_appeared
+        conditional_appeared = False
+        global loop_appeared
+        loop_appeared = False
+        global semicolon_appeared
+        semicolon_appeared = False
+
+        global parenthesis_closed
+        parenthesis_closed = False
+
+        is_string = False
 
         while self.index < len(self.inp) and self.current != None:
             print("starting ", self.current)
@@ -25,7 +54,7 @@ class Lexer:
                 if ("\n" in self.current) and not semicolon_appeared:
                     print("semicolon not found")
                     current_index = self.line
-                    self.errors.append(SyntaxError("missing semicolon", current_index - 1))
+                    self.errors.append(SyntaxError("missing semicolon in \\n", current_index - 1))
                 elif "\n" in self.current:
                     semicolon_appeared = False
 
@@ -111,6 +140,9 @@ class Lexer:
                     identifier_appeared = False
                     operator_appeared = True
                     number_appeared = False
+
+                number_appeared = False
+                identifier_appeared = False
 
                 if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
@@ -317,7 +349,10 @@ class Lexer:
                 self.line += 1
         else:
             self.current = None
+            print("NASA NONE NA AKO")
             print("semicolon: ", semicolon_appeared)
+            current_index = self.line
+            self.errors.append(SyntaxError("missing semicolon none", current_index))
 
     def tokenize_digit(self):
         numbers = ""
