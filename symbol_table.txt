@@ -1,6 +1,22 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	DIGIT                    1
+	KEYWORD                  def
+	IDENTIFIER               sum
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               a
+	DELIMETER                ,
+	IDENTIFIER               b
+	DELIMETER                ,
+	IDENTIFIER               c
+	RIGHTROUNDBRACKET        )
+	LEFTCURLYBRACE           {
+	KEYWORD                  return
+	IDENTIFIER               a
 	ADD                      +
-	DIGIT                    1
+	IDENTIFIER               b
+	ADD                      +
+	IDENTIFIER               c
+	RIGHTCURLYBRACE          }
+	EOF                      end of file
+	EOF                      end of file

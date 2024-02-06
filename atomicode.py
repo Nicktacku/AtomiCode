@@ -1,5 +1,6 @@
 from sys import argv
 from lexer import Lexer
+from parser import Parser
 
 
 class AtomiCode:
@@ -46,6 +47,9 @@ elif not argv[1].endswith("atc"):
 
 # tokens = []
 # lexemes = []
+parser = Parser(lexemes)
+
+parser.parse()
 
 new_lexemes = [str(i) for i in lexemes]
 f = open("symbol_table.txt", "w")
