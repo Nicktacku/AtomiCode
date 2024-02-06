@@ -14,35 +14,6 @@ class Lexer:
 
 
     def to_token(self):
-        global number_appeared
-        number_appeared = False
-        global operator_appeared
-        operator_appeared = False
-        global string_appeared
-        string_appeared = False
-        global opening_appeared
-        opening_appeared = False
-        global function_appeared
-        function_appeared = False
-        global parenthesis_appeared
-        parenthesis_appeared = False
-        global curly_braces_appeared
-        curly_braces_appeared = False
-        global identifier_appeared
-        identifier_appeared = False
-        global keyword_appeared
-        keyword_appeared = False
-        global conditional_appeared
-        conditional_appeared = False
-        global loop_appeared
-        loop_appeared = False
-        global semicolon_appeared
-        semicolon_appeared = False
-
-        global parenthesis_closed
-        parenthesis_closed = False
-
-        is_string = False
 
         while self.index < len(self.inp) and self.current != None:
             print("starting ", self.current)
@@ -53,7 +24,8 @@ class Lexer:
 
                 if ("\n" in self.current) and not semicolon_appeared:
                     print("semicolon not found")
-                    self.errors.append(SyntaxError("missing semicolon", self.line))
+                    current_index = self.line
+                    self.errors.append(SyntaxError("missing semicolon", current_index - 1))
                 elif "\n" in self.current:
                     semicolon_appeared = False
 
@@ -70,46 +42,51 @@ class Lexer:
             not_comment = self.inp[self.index + 1] != "/" if len(self.inp) > self.index + 1 else True
 
             # *NUMBER WITH SIGN
-            if (self.current == "-" or self.current == "+") and not number_appeared and self.inp[self.index + 1] in digits:
-                print("detected digit 1", self.current)
+            if 1 < len(self.inp):
+                if (self.current == "-" or self.current == "+") and not number_appeared and self.inp[self.index + 1] in digits:
+                    print("detected digit 1", self.current)
 
-                has_error = function_appeared or identifier_appeared or number_appeared or (parenthesis_appeared and function_appeared)
+                    has_error = function_appeared or identifier_appeared or number_appeared or (parenthesis_appeared and function_appeared)
 
-                if parenthesis_appeared and function_appeared:
-                    self.errors.append(SyntaxError("invalid after function keyword", self.line))
-                elif identifier_appeared:
-                    self.errors.append(SyntaxError("invalid after an identifier", self.line))
-                elif number_appeared:
-                    self.errors.append(SyntaxError("invalid after an number", self.line))
-                elif function_appeared:
-                    self.errors.append(SyntaxError("invalid parameter for function", self.line))
+                    if parenthesis_appeared and function_appeared:
+                        self.errors.append(SyntaxError("invalid after function keyword", self.line))
+                    elif identifier_appeared:
+                        self.errors.append(SyntaxError("invalid after an identifier", self.line))
+                    elif number_appeared:
+                        self.errors.append(SyntaxError("invalid after an number", self.line))
+                    elif function_appeared:
+                        self.errors.append(SyntaxError("invalid parameter for function", self.line))
 
-                number_appeared = True
-                operator_appeared = False
+                    number_appeared = True
+                    operator_appeared = False
 
 
-                output = self.tokenize_digit()
-                if "INVALID" in output or has_error:
-                    self.tokens.append(Invalid(output[0]))
-                elif "." in output:
-                    self.tokens.append(Float(output))
-                else:
-                    self.tokens.append(Digit(output))
+                    output = self.tokenize_digit()
+                    if "INVALID" in output:
+                        self.tokens.append(Invalid(output[0]))
+                    elif "." in output:
+                        self.tokens.append(Float(output))
+                    else:
+                        self.tokens.append(Digit(output))
 
             # *DIGITS
-            elif self.current in digits:
+            if self.current in digits:
                 print("detected digit 2 ", self.current)
 
-                has_error = function_appeared or identifier_appeared or number_appeared or (parenthesis_appeared and function_appeared)
-                
-                if function_appeared:
-                    self.errors.append(SyntaxError("invalid after function keyword", self.line))
-                
+                if (parenthesis_appeared and function_appeared):
+                    self.errors.append(SyntaxError("digit invalid as parameter", self.line))
+                elif function_appeared:
+                    self.errors.append(SyntaxError("digit invalid after function keyword", self.line))
+                elif identifier_appeared:
+                    self.errors.append(SyntaxError("digit invalid after identifier keyword", self.line))
+                elif number_appeared:
+                    self.errors.append(SyntaxError("digit invalid after another digit", self.line))
+
                 number_appeared = True
                 operator_appeared = False
 
                 output = self.tokenize_digit()
-                if "INVALID" in output or has_error:
+                if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
                 elif "." in output:
                     self.tokens.append(Float(output))
@@ -124,20 +101,18 @@ class Lexer:
                 if not number_appeared and not identifier_appeared:
                     print("NOT VALID")
                     print(not number_appeared and not identifier_appeared)
-                    self.errors.append("invalid before operation")
+                    self.errors.append(SyntaxError("invalid for operation", self.line))
 
                 if output[0] in assignments:
                     has_error = not identifier_appeared
-                    identifier_appeared = False
-                    operator_appeared = True
-                    number_appeared = False
-                else:
-                    has_error = function_appeared or operator_appeared or (identifier_appeared and function_appeared) or (parenthesis_appeared and function_appeared)
-                    number_appeared = False
-                    operator_appeared = True
-                    identifier_appeared = False
+                    if not identifier_appeared:
+                        self.errors.append(SyntaxError("expecting identifier", self.line))
 
-                if "INVALID" in output or has_error:
+                    identifier_appeared = False
+                    operator_appeared = True
+                    number_appeared = False
+
+                if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Operator(output[0], output[1]))
@@ -148,7 +123,12 @@ class Lexer:
 
                 before_parenthesis = parenthesis_appeared and not (number_appeared or identifier_appeared or string_appeared)
 
-                has_error = operator_appeared or (function_appeared and not identifier_appeared) or before_parenthesis
+                if operator_appeared:
+                    self.errors.append(SyntaxError("operator invalid as parameter", self.line))
+                elif before_parenthesis:
+                    self.errors.append(SyntaxError("missing parameter", self.line))
+                elif (function_appeared and not identifier_appeared):
+                    self.errors.append(SyntaxError("missing name for function", self.line))
                 print(operator_appeared)
 
                 number_appeared = False
@@ -161,8 +141,19 @@ class Lexer:
                 if output == ";":
                     print("HELLO")
                     semicolon_appeared = True
-                
-                if "INVALID" in output or has_error:
+                    number_appeared = False
+                    operator_appeared = False
+                    string_appeared = False
+                    opening_appeared = False
+                    function_appeared = False
+                    parenthesis_appeared = False
+                    identifier_appeared = False
+                    keyword_appeared = False
+                    conditional_appeared = False
+                    loop_appeared = False
+                    semicolon_appeared = False
+
+                if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Delimeter(output))
@@ -176,32 +167,46 @@ class Lexer:
                 if output[1] == "IDENTIFIER" and function_appeared:
                     identifier_appeared = True
                     has_error = operator_appeared or number_appeared
+
+                    if operator_appeared or number_appeared:
+                        self.errors.append(SyntaxError("identifier expected after function declaration", self.line))
+
                 elif output[1] == "IDENTIFIER":
-                    has_error = number_appeared or (function_appeared and output[0] != "def") or identifier_appeared
+                    if number_appeared:
+                        self.errors.append(SyntaxError("digit invalid before identifier", self.line))
+                    elif identifier_appeared:
+                        self.errors.append(SyntaxError("cannot have another identifier", self.line))
                     print(number_appeared)
                     identifier_appeared = True
                     operator_appeared = False
 
                 elif output[0] == "def":
                     has_error = operator_appeared or number_appeared or function_appeared or parenthesis_appeared
+                    if has_error:
+                        self.errors.append(SyntaxError("invalid before function", self.line))
                     function_appeared = True
                 elif output[0] == "iter":
-                    has_error = False # lagay lahat
+                    has_error = operator_appeared or number_appeared or function_appeared or parenthesis_appeared # lagay lahat
+
+                    if has_error:
+                        self.errors.append(SyntaxError("invalid before iter", self.line))
+
                     loop_appeared = True
                 elif output[0] == "in":
-                    has_error = loop_appeared and not identifier_appeared
-
-                    if not has_error:
-                        identifier_appeared = False
-                        number_appeared = False
+                    if loop_appeared and not identifier_appeared:
+                        self.errors.append(SyntaxError("missing identifier before in", self.line))
+                    identifier_appeared = False
+                    number_appeared = False
                 elif operator_appeared:
-                    self.errors.append("invalid after operation")
+                    self.errors.append(SyntaxError("cannot do operation on keywords"), self.line)
                 else:
                     has_error = keyword_appeared
+                    if keyword_appeared:
+                        self.errors.append(SyntaxError("cannot have another keyword"), self.line)
                     keyword_appeared = True
                     print("AKO ANG LUMITAW")
 
-                if "INVALID" in output or has_error:
+                if "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     self.tokens.append(Lexeme(output[0], output[1]))
@@ -210,23 +215,30 @@ class Lexer:
             elif self.current in special_characters:
                 quotations = ["'", '"']
                 print("special characters ", self.current)
-                has_error = operator_appeared or number_appeared or function_appeared or identifier_appeared
+                has_error = function_appeared or identifier_appeared
+
+                if operator_appeared:
+                    self.errors.append(SyntaxError("cannot have operator before special character"), self.line)
+                elif number_appeared:
+                    self.errors.append(SyntaxError("cannot have digit before special character", self.line))
+                elif function_appeared:
+                    self.errors.append(SyntaxError("cannot have digit before special character", self.line))
 
                 if self.current in quotations:
                     output = self.tokenize_string()
-                    if "INVALID" in output or has_error:
+                    if "INVALID" in output:
                         self.tokens.append(Invalid(output[0]))
                     else:
                         self.tokens.append(SpecialChar(output[0], output[1]))
 
                     output = self.tokenize_string()
-                    if "INVALID" in output or has_error:
+                    if "INVALID" in output:
                         self.tokens.append(Invalid(output[0]))
                     else:
                         self.tokens.append(Lexeme(output[0], output[1]))
 
                     output = self.tokenize_string()
-                    if "INVALID" in output or has_error:
+                    if "INVALID" in output:
                         self.tokens.append(Invalid(output[0]))
                     else:
                         self.tokens.append(SpecialChar(output[0], output[1]))
@@ -260,7 +272,7 @@ class Lexer:
                     print("HELLO MY PREND")
 
                     self.tokens.append(SpecialChar(output[0], output[1]))
-                elif "INVALID" in output or has_error:
+                elif "INVALID" in output:
                     self.tokens.append(Invalid(output[0]))
                 else:
                     print(self.current)

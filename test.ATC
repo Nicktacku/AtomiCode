@@ -1,5 +1,1 @@
-def sum(1, b, c){
-    result = a + b + c
-    return result;
-};
-
++
