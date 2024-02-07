@@ -270,7 +270,7 @@ class Parser:
                 elif self.next.token == "BOOLEANLITERALS":
                     self.move()
                 else:
-                    self.errors.append(SyntaxError("Invalid syntax for control flow statement"), s, self.current.valueelf.current.line)
+                    self.errors.append(SyntaxError("Invalid syntax for control flow statement", self.current.line, self.current.value))
                     self.move()
                     break
             if self.current.token == "RIGHTROUNDBRACKET":
