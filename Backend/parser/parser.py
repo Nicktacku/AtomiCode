@@ -265,7 +265,7 @@ class Parser:
                     self.next_token(True)
                     self.prev_token(True)
 
-                    if (self.prev.token in acceptables or self.prev.value in unique_values) and (self.next.token in acceptables or self.prev.value in unique_values):
+                    if (self.prev.token in acceptables or self.prev.value in unique_values) and (self.next.token in acceptables or self.next.value in unique_values):
                         self.move()
                         self.move()
                 elif self.next.token in ["BOOLEANLITERALS", "IDENTIFIER"]:
