@@ -355,13 +355,16 @@ class Parser:
         if self.current.token == "LEFTROUNDBRACKET":
             self.move()
             while self.current.token != "RIGHTROUNDBRACKET":
-                if self.current.token in ["IDENTIFIER", "DIGIT", "STRING"]:
+                if self.current.token in ["IDENTIFIER", "DIGIT", "QUOTATIONMARK"]:
                     self.move()
                     if self.current.value == ",":
                         self.move()
                     elif isinstance(self.current, Operator):
                         self.parse_operator()
                         print("add in parameter")
+                    elif self.current.token == "STRING" and self.next_token().token == "QUOTATIONMARK":
+                        self.move()
+                        self.move()
                     elif self.current.token == "RIGHTROUNDBRACKET":
                         self.move()
                         break
