@@ -281,14 +281,14 @@ class Parser:
                 self.move()
                 return True
             else:
-                self.errors.append(SyntaxError("invalid for control flow statement", self.curr, self.current.valueent.line))
+                self.errors.append(SyntaxError("invalid for control flow statement", self.current.line, self.current.value))
                 return False
             self.move()
         if self.current.token == "LEFTCURLYBRACE":
             self.move()
             return True
         else:
-            self.errors.append(SyntaxError("Invalid for control flow statement", self.curr, self.current.valueent.line))
+            self.errors.append(SyntaxError("Invalid for control flow statement", self.current.line, self.current.value))
             return False
 
     def parse_looping(self):
