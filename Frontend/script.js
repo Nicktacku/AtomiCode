@@ -18,6 +18,8 @@ async function showResult() {
   console.log(data);
 
   if (data.error === false) {
+    document.getElementById("ht05").innerText = "LEXEMES:";
+    document.getElementById("ht06").innerText = "TOKENS:";
     let lexeme = data.lexeme;
     let token = data.token;
 
@@ -83,7 +85,7 @@ async function showResult() {
 
       tokenDisplay.appendChild(listItem);
     }
-    document.getElementById("ht05").innerText = "Errors";
-    document.getElementById("ht06").innerText = "Invalid Lexemes";
+    document.getElementById("ht05").innerText = "ERRORS:";
+    document.getElementById("ht06").innerText = "INVALID LEXEMES:";
   }
 }
