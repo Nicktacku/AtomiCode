@@ -1,23 +1,48 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	BACKSLASH                \
-	IDENTIFIER               CH
-	EXPONENT                 ^
-	DIGIT                    4
-	ADD                      +
-	NONMETALSYMBOLLITERAL    O
-	EXPONENT                 ^
-	DIGIT                    2
-	BALANCINGARROW           ==>
-	IDENTIFIER               CO
-	EXPONENT                 ^
-	DIGIT                    2
-	ADD                      +
-	NONMETALSYMBOLLITERAL    H
-	EXPONENT                 ^
-	DIGIT                    20
-	BACKSLASH                \
-	DELIMETER                ;
+	SINGLELINECOMMENT        //
+	COMMENTLITERAL           
+	IDENTIFIER               Create
+	DIGIT                    3
+	IDENTIFIER               simple
+	IDENTIFIER               program
+	IDENTIFIER               for
+	IDENTIFIER               Error
+	INVALID                  -Free
+	IDENTIFIER               Sample
+	SINGLELINECOMMENT        //
+	COMMENTLITERAL           
+	DIGIT                    1
+	IDENTIFIER               st
+	IDENTIFIER               Error
+	IDENTIFIER               Input
+	KEYWORD                  def
+	IDENTIFIER               chemical_element
+	LEFTROUNDBRACKET         (
+	IDENTIFIER               atnum
+	RIGHTROUNDBRACKET        )
+	INVALID                  :
+	MULTILINECOMMENT         #
+	COMMENTLITERAL           Defining Chemical lists
+{
+    metals = {"Li", "Na", "K", "Rb", "Cs", "Fr", "Be", "Mg", "Ca", "Sr", "Ba", "Ra", "Al", "Ga", "In", "Tl", "Sn", "Pb", "Bi", "Po"};
+    non_metals = {"H", "C", "N", "P", "O", "S", "Se", "F", "Cl", "Br", "I", "At", "He", "Ne", "Ar", "Kr", "Xe", "Rn"};
+    metalloids = {"B", "Si", "Ge", "As", "Sb", "Te", "Po"};
+
+    grp1 = metals | non_metals | metalloids
+} 
+
+
+
+
+
+
+
+
+
+
+
+
 	EOF                      end of file
 	EOF                      end of file

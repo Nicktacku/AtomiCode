@@ -1,0 +1,54 @@
+//Create 3 simple input for Error-Free Sample
+
+// 1st Error Input
+def chemical_element(atnum):
+#Defining Chemical lists
+{
+    Metals = metals
+    Non_metals = non_metals
+    Metalloids = metalloids
+
+    grp1 = metals | non_metals | metalloids
+} 
+
+// 2nd Error Input
+element = inp("Enter the chemical element starting with @:")
+
+    // To check if chemical element is Oxygen
+    assuming element >= @O:
+        print("This Chemical name is Oxygen.")
+
+    unless:
+        print("You do not have enough Oxygen.")
+
+
+// 3rd Error Input
+iter $ num in numbers:
+
+     print("num")
+
+//Create 3 simple input for Error Sample
+
+// 1st Error-Free Input
+
+num = 10;
+assuming 
+
+if num % 3 ==0
+{
+    print(f"{num} is even.");
+}
+else
+{
+    print(f"{num} is odd.");
+}
+
+
+// 2nd Error-Free Input
+
+
+
+
+// 3rd Error-Free Input
+
+
