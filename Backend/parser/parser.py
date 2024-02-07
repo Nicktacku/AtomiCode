@@ -248,7 +248,7 @@ class Parser:
             return False
 
     def parse_control_flow(self):
-        unique_values = at_num + metals + non_metals + metalloids + n_metals + n_non_metals + n_metalloids + alkali_list + alkaline_earth_list + icosagens_list + crystal_list  + pnicto_list + chalco_list + halo_list + noble_list + n_alkali_list + n_alkaline_earth_list + n_icosagens_list + n_crystal_list + n_pnicto_list + n_chalco_list + n_halo_list + n_noble_list + pos_charges + neg_charges + at_charges
+        unique_values = at_num + metals + non_metals + metalloids + n_metals + n_non_metals + n_metalloids + alkali_list + alkaline_earth_list + icosagens_list + crystal_list  + pnicto_list + chalco_list + halo_list + noble_list + n_alkali_list + n_alkaline_earth_list + n_icosagens_list + n_crystal_list + n_pnicto_list + n_chalco_list + n_halo_list + n_noble_list
         if self.current.value == "assuming":
             self.move()
         if self.current.value == "unless":
