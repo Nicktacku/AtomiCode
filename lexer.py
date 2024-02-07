@@ -100,6 +100,7 @@ class Lexer:
             # *SPECIAL CHARACTERS
             elif self.current in special_characters:
                 quotations = ["'", '"']
+                comments = ["/", "#"]
                 print("special characters ", self.current)
 
 
@@ -122,6 +123,27 @@ class Lexer:
                     else:
                         self.tokens.append(SpecialChar(output[0], output[1], self.line))
                     continue
+                elif self.current in comments:
+                    if self.current == "/":
+                        print("in single line comment")
+                        output = self.tokenize_comment()
+                        self.tokens.append(SpecialChar(output[0], output[1], self.line))
+
+                        output = self.tokenize_comment()
+                        self.tokens.append(Lexeme(output[0], output[1], self.line))
+                        continue
+
+                    elif self.current == "#":
+                        output = self.tokenize_comment()
+                        self.tokens.append(SpecialChar(output[0], output[1], self.line))
+
+                        output = self.tokenize_comment()
+                        self.tokens.append(Lexeme(output[0], output[1], self.line))
+
+                        output = self.tokenize_comment()
+                        if output is not None:
+                            self.tokens.append(SpecialChar(output[0], output[1], self.line))
+                        continue
                 elif self.current == "_":
                     output = self.tokenize_lexeme()
                 else:
@@ -130,7 +152,7 @@ class Lexer:
                 if "INVALID" in output:
                     self.tokens.append(Invalid(output[0], self.line))
                 else:
-                    print(self.current)
+                    print("else of special chars", self.current)
                     self.tokens.append(SpecialChar(output[0], output[1], self.line))
 
             # *FLOAT
@@ -156,8 +178,8 @@ class Lexer:
 
                 if self.current is None:
                     print("currently non")
-                    
                     break
+        print("end current", self.current)
         print("total lines: ", self.line)
         
         self.tokens.append(Eof(self.line))
@@ -271,10 +293,6 @@ class Lexer:
 
 
         # for comments
-        if self.current == "/" and self.inp[self.index] == "/":
-            self.move()
-            self.move()
-            return ("//", "SINGLELINECOMMENT")
 
         
         special_character = self.current
@@ -333,6 +351,27 @@ class Lexer:
                 value += self.current
                 self.move()
             return (value, "STRING")
+
+    def tokenize_comment(self):
+        output = ""
+        if self.current == "/" and self.inp[self.index + 1] == "/":
+            self.move()
+            self.move()
+            return ("//", "SINGLELINECOMMENT")
+        elif self.inp[self.index - 1] == "/":
+            while self.current is not None and self.current == "\n":
+                output += self.current
+                self.move()
+            return (output, "COMMENTLITERAL")
+
+        if self.current == "#":
+            self.move()
+            return ("#", "MULTILINECOMMENT")
+        elif self.inp[self.index - 1] == "#":
+            while self.current is not None and self.current != "#":
+                output += self.current
+                self.move()
+            return (output, "COMMENTLITERAL")
 
 
 

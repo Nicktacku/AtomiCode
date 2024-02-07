@@ -51,6 +51,7 @@ class Delimeter(Token):
 class SpecialChar(Token):
     def __init__(self, value, token, line):
         super().__init__(value, token, line)
+        
 
     def __repr__(self):
         return self.token
@@ -62,6 +63,7 @@ class SpecialChar(Token):
 class Lexeme(Token):
     def __init__(self, value, token, line):
         super().__init__(value, token, line)
+        
 
     def __repr__(self):
         return self.token
@@ -78,12 +80,13 @@ class Invalid(Token):
         return self.token
 
     def __str__(self):
-        print(self.value)
+        
         return format(self.token, "<25") + self.value
 
 class Eof(Token):
     def __init__(self, line):
         super().__init__("end of file", "EOF", line)
+        print("runned")
 
     def __repr__(self):
         return self.token

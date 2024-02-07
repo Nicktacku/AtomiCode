@@ -130,8 +130,6 @@ n_chalco_list = ["@Oxygen", "@Sulfur", "@Selenium", "@Tellurium", "@Polonium"]
 n_halo_list = ["@Fluorine", "@Chlorine", "@Bromine", "@Iodine", "@Astatine"]
 n_noble_list = ["@Helium", "@Neon", "@Argon", "@Krypton", "@Xenon", "@Radon"]
 
-# pos_charges = ["@+1", "@+2", "@+3", "@+4", "@+5", "@+6", "@+7"]
-# neg_charges = ["@-1", "@-2", "@-3", "@-4", "@-5", "@-6", "@-7"]
 
 constants = [
     "celcius_farenheit",

@@ -1,22 +1,23 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
-	KEYWORD                  def
-	IDENTIFIER               sum
-	LEFTROUNDBRACKET         (
-	IDENTIFIER               a
-	DELIMETER                ,
-	IDENTIFIER               b
-	DELIMETER                ,
-	IDENTIFIER               c
-	RIGHTROUNDBRACKET        )
-	LEFTCURLYBRACE           {
-	KEYWORD                  return
-	IDENTIFIER               a
+	BACKSLASH                \
+	IDENTIFIER               CH
+	EXPONENT                 ^
+	DIGIT                    4
 	ADD                      +
-	IDENTIFIER               b
+	NONMETALSYMBOLLITERAL    O
+	EXPONENT                 ^
+	DIGIT                    2
+	BALANCINGARROW           ==>
+	IDENTIFIER               CO
+	EXPONENT                 ^
+	DIGIT                    2
 	ADD                      +
-	IDENTIFIER               c
-	RIGHTCURLYBRACE          }
+	NONMETALSYMBOLLITERAL    H
+	EXPONENT                 ^
+	DIGIT                    20
+	BACKSLASH                \
+	DELIMETER                ;
 	EOF                      end of file
 	EOF                      end of file
