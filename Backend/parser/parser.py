@@ -244,7 +244,7 @@ class Parser:
             return True
         else:
             print("else", self.current)
-            self.errors.append(SyntaxError("Invalid for function declaration", self.current, self.current.valuet.line))
+            self.errors.append(SyntaxError("Invalid for function declaration", self.current, self.current.value.line))
             return False
 
     def parse_control_flow(self):
