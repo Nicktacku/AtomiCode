@@ -125,7 +125,6 @@ class Lexer:
                     continue
                 elif self.current in comments:
                     if self.current == "/":
-                        print("in single line comment")
                         output = self.tokenize_comment()
                         self.tokens.append(SpecialChar(output[0], output[1], self.line))
 
@@ -170,11 +169,11 @@ class Lexer:
                 if self.current in spaces:
                     self.move()
                 else:
-                    invalid = ""
+                    illegal = ""
                     while self.current not in spaces and self.current is not None:
-                        invalid += self.current
+                        illegal += self.current
                         self.move()
-                    self.tokens.append(Invalid(invalid, self.line))
+                    self.tokens.append(Illegal(illegal, self.line))
 
                 if self.current is None:
                     print("currently non")
@@ -200,7 +199,7 @@ class Lexer:
         valid_digits = digits + "." + "-" + "+"
         not_digit = False
 
-        while self.current not in spaces and self.current != None and self.current in valid_digits:
+        while self.current not in spaces and self.current != None and self.current not in delimeters and self.current != ")":
             numbers += self.current
             print("here in number")
             if self.current not in valid_digits:
@@ -358,8 +357,10 @@ class Lexer:
             self.move()
             self.move()
             return ("//", "SINGLELINECOMMENT")
-        elif self.inp[self.index - 1] == "/":
-            while self.current is not None and self.current == "\n":
+        else:
+            print("IN SINGLELINE COMMENT: ", self.current)
+            while self.current is not None and not "\n" in self.current:
+                print("IN SINGLELINE COMMENT: ", self.current)
                 output += self.current
                 self.move()
             return (output, "COMMENTLITERAL")

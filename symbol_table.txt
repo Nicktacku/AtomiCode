@@ -1,22 +1,21 @@
 ----------------------------------------
 |	Tokens					Lexemes    |
 ----------------------------------------
+	SINGLELINECOMMENT        //
+	COMMENTLITERAL            2nd Error- Free Input
 	BACKSLASH                \
-	IDENTIFIER               CH
+	NONMETALSYMBOLLITERAL    H
 	EXPONENT                 ^
-	DIGIT                    4
+	DIGIT                    1
 	ADD                      +
 	NONMETALSYMBOLLITERAL    O
 	EXPONENT                 ^
 	DIGIT                    2
 	BALANCINGARROW           ==>
-	IDENTIFIER               CO
-	EXPONENT                 ^
-	DIGIT                    2
-	ADD                      +
 	NONMETALSYMBOLLITERAL    H
 	EXPONENT                 ^
-	DIGIT                    20
+	DIGIT                    2
+	NONMETALSYMBOLLITERAL    O
 	BACKSLASH                \
 	DELIMETER                ;
 	EOF                      end of file

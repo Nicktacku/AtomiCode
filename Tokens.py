@@ -80,7 +80,16 @@ class Invalid(Token):
         return self.token
 
     def __str__(self):
-        
+        return format(self.token, "<25") + self.value
+
+class Illegal(Token):
+    def __init__(self, value, line):
+        super().__init__(value, "ILLEGAL", line)
+
+    def __repr__(self):
+        return self.token
+
+    def __str__(self):
         return format(self.token, "<25") + self.value
 
 class Eof(Token):
@@ -93,3 +102,4 @@ class Eof(Token):
 
     def __str__(self):
         return format(self.token, "<25") + self.value
+

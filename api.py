@@ -10,6 +10,7 @@ api = Api(app)
 
 class HelloWorld(Resource):
     def get(self, content):
+        print(request.content())
         lexer = Lexer(content)
 
         content_output = lexer.to_token()
@@ -22,7 +23,7 @@ class HelloWorld(Resource):
                         "lexeme" : list(lexeme),
                         "token" : list(token)})
 
-api.add_resource(HelloWorld, "/helloworld/<string:content>")
+api.add_resource(HelloWorld, "/helloworld/")
 
 if __name__ == "__main__":
     app.run(debug=True)

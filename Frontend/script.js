@@ -1,8 +1,3 @@
-// let result = "";
-
-// fetch("https://pokeapi.co/api/v2/pokemon/ditto")
-//   .then((response) => response.json())
-//   .then((data) => (result = data.name));
 document.getElementById("home-run").addEventListener("click", showResult);
 console.log(result);
 
@@ -14,7 +9,11 @@ async function showResult() {
 
   console.log(code);
 
-  const response = await fetch(`http://127.0.0.1:5000/helloworld/${code}`);
+  const response = await fetch("http://127.0.0.1:8000/helloworld/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code: code }),
+  });
   const data = await response.json();
 
   let lexeme = data.lexeme;

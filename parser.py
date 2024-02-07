@@ -84,21 +84,21 @@ class Parser:
             if self.current.value in builtin_functions:
                 semicolon_appeared = False
                 self.parse_called_function()
-            if self.current.token == "IDENTIFIERS" and self.next_toke():
+            if self.current.token == "IDENTIFIERS" and self.next_token():
                 self.parse_called_function()
-            
+
+            if self.current.token == "INVALID":
+                self.errors.append(LexicalError("Invalid Value", self.current.line))
+                self.move()
+            if self.current.token == "ILLEGAL":
+                self.errors.append(IllegalLexError("Illegal Character", self.current.line))
+                self.move()
+
             self.move()
-
-
-
-
-
 
             if isinstance(self.current, Eof):
                 if curlybrace_appeared:
                     self.errors.append(SyntaxError("Curlybrace not closed", self.current.line))
-                # elif not semicolon_appeared:
-                #     self.errors.append(SyntaxError("Semicolon Missing", self.current.line))
                 break
         print(self.errors)
 
@@ -164,7 +164,7 @@ class Parser:
 
         print(self.prev.token == "IDENTIFIER" and (self.next.token in ["IDENTIFIER", "DIGIT"] or is_string ))
 
-        if self.prev.token == "IDENTIFIER" and (self.next.token in ["IDENTIFIER", "DIGIT"] or is_string or self.next.value == "inp"):
+        if self.prev.token == "IDENTIFIER" and (self.next.token in ["IDENTIFIER", "DIGIT", "CONSTANT"] or is_string or self.next.value == "inp"):
             if self.next.value == "inp":
                 self.move()
                 self.move()
@@ -294,6 +294,7 @@ class Parser:
     def parse_looping(self):
         if self.current.value == "iter":
             self.move()
+            # while self.current.token == "IDENTIFIER" or self.current.value == ",":
         if self.current.token == "IDENTIFIER":
             self.move()
         if self.current.value == "in":
@@ -325,6 +326,29 @@ class Parser:
                 self.move()
 
     def parse_called_function(self):
+        if self.current.value in ["boyle", "charles", "gay_lussac", "avogadro", "ideal_gas", "combined_gas"]:
+            self.move()
+        if self.current.token == "LEFTROUNDBRACKET":
+            self.move()
+            if self.current.token in ["DIGIT", "IDENTIFIER"]:
+                self.move()
+                if self.current.value == ",":
+                    self.move()
+                if self.current.token in ["DIGIT", "IDENTIFIER"]:
+                    self.move()
+                if self.current.value == ",":
+                    self.move()
+                if self.current.token in ["DIGIT", "IDENTIFIER"]:
+                    self.move()
+                if self.current.value == ",":
+                    self.move()
+                if self.current.token in ["DIGIT", "IDENTIFIER"]:
+                    self.move()
+                else:
+                    self.errors.append(SyntaxError("Unexpected for built in function", self.current.line))
+            
+            
+        
         if self.current.token in ["KEYWORD", "IDENTIFIER"]:
             self.move()
         
@@ -359,17 +383,17 @@ class Parser:
         if self.current.value in valid_value or self.current.token in ["IDENTIFIER", "EXPONENT", "DIGIT"]:
 
             while self.current.value in valid_value or self.current.token in ["IDENTIFIER", "EXPONENT", "DIGIT"] and self.current.token != "BALANCINGARROW":
-                
+
                 if self.current.value in valid_value or self.current.token == "IDENTIFIER":
                     self.move()
-                    
+
                     if self.current.token == "EXPONENT":
-                        
+
                         self.move()
-                        
+
                         if self.current.token in ["DIGIT", "IDENTIFIER"]:
                             self.move()
-                            
+
                     if self.current.token == "ADD":
                         if self.next_token().token == "BALANCINGARROW":
                             self.errors.append(SyntaxError("Missing value for balancing operation", self.current.line))
@@ -388,3 +412,9 @@ class Parser:
                         if self.next_token().token == "BALANCINGARROW":
                             self.errors.append(SyntaxError("Missing value for balancing operation", self.current.line))
                         self.move()
+            self.move()
+            if self.current.value == ";":
+                self.move()
+            else:
+                print(self.current)
+                self.errors.append(SyntaxError("Missing semicolon", self.current.line))
