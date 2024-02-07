@@ -1,0 +1,8 @@
+----------------------------------------
+|	Tokens					Lexemes    |
+----------------------------------------
+	QUOTATIONMARK            "
+	STRING                   hello
+	QUOTATIONMARK            "
+	EOF                      end of file
+	EOF                      end of file

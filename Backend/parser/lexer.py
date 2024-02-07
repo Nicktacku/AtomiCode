@@ -1,5 +1,5 @@
-from constants import *
-from Tokens import *
+from .constants import *
+from .Tokens import *
 
 class Lexer:
     def __init__(self, inp):

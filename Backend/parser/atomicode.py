@@ -1,6 +1,6 @@
-from sys import argv
-from lexer import Lexer
-from parser import Parser
+from .sys import argv
+from .lexer import Lexer
+from .parser import Parser
 
 
 class AtomiCode:

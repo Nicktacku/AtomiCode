@@ -1,6 +1,6 @@
-from Tokens import *
-from Errors import *
-from constants import *
+from .Tokens import *
+from .Errors import *
+from .constants import *
 
 class Parser:
     def __init__(self, tokens):
@@ -27,7 +27,6 @@ class Parser:
         builtin_functions = ["out", "inp"]
 
         while self.index < len(self.tokens):
-            
             if self.current.token == "BACKSLASH":
 
                 self.parse_balancing()
@@ -65,7 +64,7 @@ class Parser:
                 curlybrace_appeared = self.parse_control_flow()
 
             elif self.current.value in ["unless", "than"] and not assuming_started:
-                self.errors.append(SyntaxError("Missing assuming statement", self.current.line))
+                self.errors.append(SyntaxError("Missing assuming statement", self.current.line, self.current.value))
                 self.move()
 
             if self.current.value == "iter":
@@ -76,7 +75,7 @@ class Parser:
             if self.current.token == "RIGHTCURLYBRACE":
                 curlybrace_appeared = False
                 if self.next_token().value != ";" and (not self.next_token().value in ["unless", "than"] and not assuming_started):
-                    self.errors.append(SyntaxError("Missing semicolon", self.current.line))
+                    self.errors.append(SyntaxError("Missing semicolon", self.current.line, self.current.value))
 
             if self.current.token in comments:
                 self.parse_comment()
@@ -88,19 +87,20 @@ class Parser:
                 self.parse_called_function()
 
             if self.current.token == "INVALID":
-                self.errors.append(LexicalError("Invalid Value", self.current.line))
+                self.errors.append(LexicalError("Invalid Value", self.current.line, self.current.value))
                 self.move()
             if self.current.token == "ILLEGAL":
-                self.errors.append(IllegalLexError("Illegal Character", self.current.line))
+                self.errors.append(IllegalLexError("Illegal Character", self.current.line, self.current.value))
                 self.move()
 
             self.move()
 
             if isinstance(self.current, Eof):
                 if curlybrace_appeared:
-                    self.errors.append(SyntaxError("Curlybrace not closed", self.current.line))
+                    self.errors.append(SyntaxError("Curlybrace not closed", self.current.line, self.current.value))
                 break
         print(self.errors)
+        return self.errors
 
     def move(self):
         self.index += 1
@@ -144,10 +144,10 @@ class Parser:
             self.move()
         else:
             print("in operator error", self.current)
-            self.errors.append(SyntaxError("semicolon not found", semicolon_index))
+            self.errors.append(SyntaxError("semicolon not found", semicolon_index, self.current.value))
 
         if not operator_valid:
-            self.errors.append(SyntaxError("invalid for operation", semicolon_index))
+            self.errors.append(SyntaxError("invalid for operation", semicolon_index, self.current.value))
             self.move()
             return False
 
@@ -177,7 +177,7 @@ class Parser:
                 if self.current.value == ";":
                     self.move()
                 else:
-                    self.errors.append(SyntaxError("missing semicolon", self.current.line))
+                    self.errors.append(SyntaxError("missing semicolon", self.current.line, self.current.value))
                 return
             if is_string:
                 return
@@ -189,9 +189,9 @@ class Parser:
                 self.parse_operator()
             else:
                 print("assigment error")
-                self.errors.append(SyntaxError("semicolon not found (assignment)", semicolon_index))
+                self.errors.append(SyntaxError("semicolon not found (assignment)", semicolon_i, self.current.valuendex))
         else:
-            self.errors.append(SyntaxError("invalid for operation (assignment)", self.current.line))
+            self.errors.append(SyntaxError("invalid for operation (assignment)", self.curr, self.current.valueent.line))
             self.move()
             return False
 
@@ -211,11 +211,11 @@ class Parser:
                 self.move()
             else:
                 print("string error")
-                self.errors.append(SyntaxError("semicolon not found", semicolon_index))
+                self.errors.append(SyntaxError("semicolon not found", semicolon_index, self.current.value))
 
             return True
         else:
-            self.errors.append(SyntaxError("Invalid string", self.current.line))
+            self.errors.append(SyntaxError("Invalid string", self.current.line, self.current.value))
             self.move()
             return False
 
@@ -236,15 +236,15 @@ class Parser:
                         break
                     else:
                         self.move()
-                        self.errors.append(SyntaxError("Invalid for parameter", self.current.line))
+                        self.errors.append(SyntaxError("Invalid for parameter", self.current.line, self.current.value))
                 else:
-                    self.errors.append(SyntaxError("Invalid for parameter", self.current.line))
+                    self.errors.append(SyntaxError("Invalid for parameter", self.current.line, self.current.value))
         if self.current.token == "LEFTCURLYBRACE":
             self.move()
             return True
         else:
             print("else", self.current)
-            self.errors.append(SyntaxError("Invalid for function declaration", self.current.line))
+            self.errors.append(SyntaxError("Invalid for function declaration", self.curren, self.current.valuet.line))
             return False
 
     def parse_control_flow(self):
@@ -270,7 +270,7 @@ class Parser:
                 elif self.next.token == "BOOLEANLITERALS":
                     self.move()
                 else:
-                    self.errors.append(SyntaxError("Invalid syntax for control flow statement"), self.current.line)
+                    self.errors.append(SyntaxError("Invalid syntax for control flow statement"), s, self.current.valueelf.current.line)
                     self.move()
                     break
             if self.current.token == "RIGHTROUNDBRACKET":
@@ -281,14 +281,14 @@ class Parser:
                 self.move()
                 return True
             else:
-                self.errors.append(SyntaxError("invalid for control flow statement", self.current.line))
+                self.errors.append(SyntaxError("invalid for control flow statement", self.curr, self.current.valueent.line))
                 return False
             self.move()
         if self.current.token == "LEFTCURLYBRACE":
             self.move()
             return True
         else:
-            self.errors.append(SyntaxError("Invalid for control flow statement", self.current.line))
+            self.errors.append(SyntaxError("Invalid for control flow statement", self.curr, self.current.valueent.line))
             return False
 
     def parse_looping(self):
@@ -305,7 +305,7 @@ class Parser:
             self.move()
             return True
         else:
-            self.errors.append(SyntaxError("Invalid for looping statement", self.current.line))
+            self.errors.append(SyntaxError("Invalid for looping statement", self.current.l, self.current.valueine))
             return False
 
     def parse_comment(self):
@@ -322,7 +322,7 @@ class Parser:
             if self.current.token == "MULTILINECOMMENT":
                 self.move()
             else:
-                self.errors.append(SyntaxError("Unclosed comment", self.current.line))
+                self.errors.append(SyntaxError("Unclosed comment", self.current.line, self.current.value))
                 self.move()
 
     def parse_called_function(self):
@@ -345,7 +345,7 @@ class Parser:
                 if self.current.token in ["DIGIT", "IDENTIFIER"]:
                     self.move()
                 else:
-                    self.errors.append(SyntaxError("Unexpected for built in function", self.current.line))
+                    self.errors.append(SyntaxError("Unexpected for built in function", self.curren, self.current.valuet.line))
             
             
         
@@ -367,10 +367,10 @@ class Parser:
                         break
                     else:
                         self.move()
-                        self.errors.append(SyntaxError("Invalid for parameter", self.current.line))
+                        self.errors.append(SyntaxError("Invalid for parameter", self.current.line, self.current.value))
                 else:
                     print(self.current)
-                    self.errors.append(SyntaxError("Invalid for parameter", self.current.line))
+                    self.errors.append(SyntaxError("Invalid for parameter", self.current.line, self.current.value))
                     self.move()
                     break
 
@@ -396,7 +396,7 @@ class Parser:
 
                     if self.current.token == "ADD":
                         if self.next_token().token == "BALANCINGARROW":
-                            self.errors.append(SyntaxError("Missing value for balancing operation", self.current.line))
+                            self.errors.append(SyntaxError("Missing value for balancing operation", self.c, self.current.valueurrent.line))
                         self.move()
 
         if self.current.token == "BALANCINGARROW":
@@ -410,11 +410,11 @@ class Parser:
                             self.move()
                     if self.current.token == "ADD":
                         if self.next_token().token == "BALANCINGARROW":
-                            self.errors.append(SyntaxError("Missing value for balancing operation", self.current.line))
+                            self.errors.append(SyntaxError("Missing value for balancing operation", self.c, self.current.valueurrent.line))
                         self.move()
             self.move()
             if self.current.value == ";":
                 self.move()
             else:
                 print(self.current)
-                self.errors.append(SyntaxError("Missing semicolon", self.current.line))
+                self.errors.append(SyntaxError("Missing semicolon", self.current.line, self.current.value))
