@@ -248,6 +248,7 @@ class Parser:
             return False
 
     def parse_control_flow(self):
+        unique_values = at_num + metals + non_metals + metalloids + n_metals + n_non_metals + n_metalloids + alkali_list + alkaline_earth_list + icosagens_list + crystal_list  + pnicto_list + chalco_list + halo_list + noble_list + n_alkali_list + n_alkaline_earth_list + n_icosagens_list + n_crystal_list + n_pnicto_list + n_chalco_list + n_halo_list + n_noble_list + pos_charges + neg_charges + at_charges
         if self.current.value == "assuming":
             self.move()
         if self.current.value == "unless":
@@ -264,7 +265,7 @@ class Parser:
                     self.next_token(True)
                     self.prev_token(True)
 
-                    if self.prev.token in acceptables and self.next.token in acceptables:
+                    if (self.prev.token in acceptables or self.prev.value in unique_values) and (self.next.token in acceptables or self.prev.value in unique_values):
                         self.move()
                         self.move()
                 elif self.next.token in ["BOOLEANLITERALS", "IDENTIFIER"]:
