@@ -189,9 +189,9 @@ class Parser:
                 self.parse_operator()
             else:
                 print("assigment error")
-                self.errors.append(SyntaxError("semicolon not found (assignment)", semicolon_i, self.current.valuendex))
+                self.errors.append(SyntaxError("semicolon not found (assignment)", semicolon_index, self.current.value))
         else:
-            self.errors.append(SyntaxError("invalid for operation (assignment)", self.curr, self.current.valueent.line))
+            self.errors.append(SyntaxError("invalid for operation (assignment)", self.current.line, self.current.value))
             self.move()
             return False
 
