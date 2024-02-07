@@ -258,6 +258,7 @@ class Parser:
             self.move()
             self.next_token(True)
             while self.current.token != "RIGHTROUNDBRACKET":
+                print("in assuming ", self.current)
                 if self.next.value in boolean_operators:
                     print("is boolean")
                     acceptables = ["IDENTIFIER", "BOOLEAN", "STRING", "DIGIT"]
@@ -268,9 +269,11 @@ class Parser:
                     if (self.prev.token in acceptables or self.prev.value in unique_values) and (self.next.token in acceptables or self.next.value in unique_values):
                         self.move()
                         self.move()
-                elif self.next.token in ["BOOLEANLITERALS", "IDENTIFIER"]:
+                        
+                elif self.current.token in ["BOOLEANLITERAL", "IDENTIFIER"]:
                     self.move()
                 else:
+                    print("control flow error", self.current)
                     self.errors.append(SyntaxError("Invalid syntax for control flow statement", self.current.line, self.current.value))
                     self.move()
                     break
